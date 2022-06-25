@@ -4,7 +4,6 @@ import {Card, Button} from "react-bootstrap";
 export const User = (props) => {
     const deletePostHandler = (id) => {
         props.deletePost(id)
-        props.deletePostAction(id)
     }
 
     return (
