@@ -1,21 +1,26 @@
 import * as axios from "axios";
 
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:3000"
+    baseURL: "https://mongodb-test-two.vercel.app/api"
 })
 
 export const usersAPI = {
-    getUsers() {
-        return axiosInstance.get(`/users`)
+    getPosts() {
+        return axiosInstance.get(`/posts`)
             .then(response => {
                 return response.data
             })
     },
-    addUser(firstName, secondName, age) {
-        return axiosInstance.post(`/users`, {firstName, secondName, age})
+    addPost(author, title, content) {
+        return axiosInstance.post(`/posts`, {author, title, content})
             .then(response => {
-                console.log(response)
                 return response.data
             })
     },
+    deletePost(id) {
+        return axiosInstance.delete(`/posts/${id}`)
+            .then(response => {
+                return response.data
+            })
+    }
 }
