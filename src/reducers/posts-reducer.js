@@ -8,7 +8,7 @@ let initialState = {
     usersInfo: []
 }
 
-export const usersReducer = (state = initialState, action) => {
+export const postsReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_POSTS:
             return {
@@ -54,4 +54,4 @@ export const deletePost = (id) => async (dispatch) => {
     dispatch(getPosts())
 }
 
-export default usersReducer;
+export default postsReducer;

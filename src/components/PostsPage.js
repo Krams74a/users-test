@@ -1,10 +1,10 @@
 import React, {Component} from "react";
-import {addNewPost, addPost, deletePost, deletePostAction, getPosts} from "../reducers/users-reducer";
+import {addNewPost, addPost, deletePost, deletePostAction, getPosts} from "../reducers/posts-reducer";
 import {connect} from "react-redux";
 import User from "./User";
-import AddUsers from "./AddUsers";
+import AddPost from "./AddPost";
 
-export class UsersPage extends Component {
+export class PostsPage extends Component {
     componentDidMount() {
         this.props.getPosts()
     }
@@ -13,7 +13,7 @@ export class UsersPage extends Component {
         if (!this.props.usersInfo) return <div>Loading...</div>
         return (
             <div>
-                <AddUsers addPost={this.props.addPost} addNewPost={this.props.addNewPost}/>
+                <AddPost addPost={this.props.addPost} addNewPost={this.props.addNewPost}/>
                 {this.props.usersInfo.reverse().map(u => <User id={u._id} key={u._id} author={u.author} title={u.title}
                                                                content={u.content} picture={u.picture}
                                                                deletePost={this.props.deletePost}
@@ -29,6 +29,6 @@ const mapStateToProps = (state) => {
     }
 }
 
-const UsersContainer = connect(mapStateToProps, {getPosts, addPost, deletePost, addNewPost, deletePostAction})(UsersPage);
+const PostsContainer = connect(mapStateToProps, {getPosts, addPost, deletePost, addNewPost, deletePostAction})(PostsPage);
 
-export default UsersContainer;
+export default PostsContainer;

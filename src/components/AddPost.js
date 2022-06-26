@@ -1,7 +1,7 @@
 import {Form, Button} from "react-bootstrap"
 import {useState, useEffect} from "react";
 
-const AddUsers = (props) => {
+const AddPost = (props) => {
     function simulateNetworkRequest() {
         return new Promise((resolve) => setTimeout(resolve, 2000));
     }
@@ -54,6 +54,9 @@ const AddUsers = (props) => {
     const onSubmit = (event, author, title, content) => {
         event.preventDefault()
         props.addPost(author, title, content)
+        setAuthor("")
+        setTitle("")
+        setContent("")
     }
 
     return (
@@ -61,15 +64,15 @@ const AddUsers = (props) => {
             <Form>
                 <Form.Group className="mb-3" controlId="formBasicAuthor">
                     <Form.Label>Автор</Form.Label>
-                    <Form.Control type="author" placeholder="Имя" onChange={authorHandler}/>
+                    <Form.Control type="author" placeholder="Имя" onChange={authorHandler} value={author}/>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicTitle">
                     <Form.Label>Заголовок</Form.Label>
-                    <Form.Control type="title" placeholder="Заголовок поста" onChange={titleHandler}/>
+                    <Form.Control type="title" placeholder="Заголовок поста" onChange={titleHandler} value={title}/>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicContent">
                     <Form.Label>Содержание поста</Form.Label>
-                    <Form.Control type="content" placeholder="О чём вы хотите рассказать?" onChange={contentHandler}/>
+                    <Form.Control type="content" placeholder="О чём вы хотите рассказать?" onChange={contentHandler} value={content}/>
                 </Form.Group>
                 <Button style={{marginBottom: "10px"}} variant="primary" type="submit" onClick={(event) => onSubmit(event, author, title, content, picture)}>
                     Добавить
@@ -79,4 +82,4 @@ const AddUsers = (props) => {
     )
 }
 
-export default AddUsers;
+export default AddPost;
