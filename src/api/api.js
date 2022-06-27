@@ -5,7 +5,7 @@ const axiosInstance = axios.create({
     //baseURL: "http://localhost:5000/api",
 })
 
-export const usersAPI = {
+export const postsAPI = {
     getPosts() {
         return axiosInstance.get(`/posts`, { headers: {Authorization: "Bearer "+localStorage.getItem("token")} })
             .then(response => {
@@ -27,16 +27,25 @@ export const usersAPI = {
 }
 
 export const authAPI = {
-    registration({username, password}) {
+    registration(username, password) {
         return axiosInstance.post(`/auth/registration`, {username, password})
-            .then(response => {
-                return response.data
-            })
     },
     login(username, password) {
         return axiosInstance.post(`/auth/login`, {username, password})
             .then(response => {
                 return response.data
             })
+            .catch((error) => {
+                return error.response
+            })
     }
+}
+
+export const usersAPI = {
+    getUsers() {
+        return axiosInstance.get(`/users`, { headers: {Authorization: "Bearer "+localStorage.getItem("token")} })
+            .then(response => {
+                return response.data
+            })
+    },
 }

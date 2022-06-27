@@ -3,30 +3,45 @@ import React from "react";
 import PostsContainer from "./components/PostsPage";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from "./App.module.css"
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-import Header from "./components/Header/Header";
-import Register from "./components/Register/Register";
+import {BrowserRouter, HashRouter, Route, Routes} from "react-router-dom";
 import LoginContainer from "./components/Login/Login";
+import RegisterContainer from "./components/Register/Register";
+import {connect} from "react-redux";
+import {initializeApp} from "./reducers/app-reducer";
+import Preloader from "./components/Preloader/Preloader";
+import HeaderContainer from "./components/Header/Header";
+import UsersContainer from "./components/Users/UsersPage";
 
-const App = () => {
-    return (
-        <div>
-            <BrowserRouter>
-                <Header/>
+class App extends React.Component {
+    componentDidMount() {
+        this.props.initializeApp()
+    }
+
+    render() {
+        if (!this.props.initialized) return <Preloader />
+        return (
+            <HashRouter>
+                <HeaderContainer/>
                 <div className={styles.content}>
                     <Routes>
-                        <Route path='/posts' element={<PostsContainer/>}/>
-                    </Routes>
-                    <Routes>
-                        <Route path='/login' element={<LoginContainer />}/>
-                    </Routes>
-                    <Routes>
-                        <Route path='/register' element={<Register/>}/>
+                            <Route path='posts' element={<PostsContainer/>}/>
+                            <Route path='login' element={<LoginContainer/>}/>
+                            <Route path='register' element={<RegisterContainer/>}/>
+                            <Route path='users' element={<UsersContainer />}/>
                     </Routes>
                 </div>
-            </BrowserRouter>
-        </div>
-    )
+            </HashRouter>
+
+        )
+    }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+    return {
+        initialized: state.app.initialized
+    }
+}
+
+const AppContainer = connect(mapStateToProps, {initializeApp})(App)
+
+export default AppContainer;

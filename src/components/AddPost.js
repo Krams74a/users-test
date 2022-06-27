@@ -1,85 +1,75 @@
-import {Form, Button} from "react-bootstrap"
-import {useState, useEffect} from "react";
+import {Button, Row} from "react-bootstrap"
+import React, {useState} from "react";
+import {NavLink} from "react-router-dom";
+import {Field, Formik, Form, ErrorMessage} from "formik";
+import * as Yup from "yup"
 
 const AddPost = (props) => {
-    function simulateNetworkRequest() {
-        return new Promise((resolve) => setTimeout(resolve, 2000));
-    }
+    const [error, setError] = useState("")
+    const [success, setSuccess] = useState("")
 
-    function LoadingButton() {
-        const [isLoading, setLoading] = useState(false);
-
-        useEffect(() => {
-            if (isLoading) {
-                simulateNetworkRequest().then(() => {
-                    setLoading(false);
-                });
-            }
-        }, [isLoading]);
-
-        const handleClick = () => setLoading(true);
-
-        return (
-            <Button
-                variant="primary"
-                disabled={isLoading}
-                onClick={!isLoading ? handleClick : null}
-            >
-                {isLoading ? 'Loading…' : 'Загрузить изображение'}
-            </Button>
-        );
-    }
-
-    const [author, setAuthor] = useState("")
-    const [title, setTitle] = useState("")
-    const [content, setContent] = useState("")
-    const [picture, setPicture] = useState("")
-
-    const authorHandler = (event) => {
-        setAuthor(event.target.value)
-    }
-
-    const titleHandler = (event) => {
-        setTitle(event.target.value)
-    }
-
-    const contentHandler = (event) => {
-        setContent(event.target.value)
-    }
-
-    const pictureHandler = (event) => {
-        setPicture(event.target.value)
-    }
-
-    const onSubmit = (event, author, title, content) => {
-        event.preventDefault()
-        props.addPost(author, title, content)
-        setAuthor("")
-        setTitle("")
-        setContent("")
-    }
+    const SignupSchema = Yup.object().shape({
+        title: Yup.string()
+            .required('Обязательное поле'),
+        content: Yup.string()
+            .required('Обязательное поле')
+    })
 
     return (
         <div>
-            <Form>
-                <Form.Group className="mb-3" controlId="formBasicAuthor">
-                    <Form.Label>Автор</Form.Label>
-                    <Form.Control type="author" placeholder="Имя" onChange={authorHandler} value={author}/>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicTitle">
-                    <Form.Label>Заголовок</Form.Label>
-                    <Form.Control type="title" placeholder="Заголовок поста" onChange={titleHandler} value={title}/>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicContent">
-                    <Form.Label>Содержание поста</Form.Label>
-                    <Form.Control type="content" placeholder="О чём вы хотите рассказать?" onChange={contentHandler} value={content}/>
-                </Form.Group>
-                <Button style={{marginBottom: "10px"}} variant="primary" type="submit" onClick={(event) => onSubmit(event, author, title, content, picture)}>
-                    Добавить
-                </Button>
-            </Form>
+            <Formik initialValues={{title: '', content: '',}}
+                    validationSchema={SignupSchema}
+                    onSubmit={(values, {resetForm}) => {
+                        props.addPost(props.loggedUserInfo.username, values.title, values.content)
+                        resetForm({})
+                    }}>
+                <Form>
+                    <Row className="mb-3">
+                        <div className="col-md-6">
+                            <label htmlFor="title">Заголовок</label>
+                            <Field
+                                name="title"
+                                className="form-control"
+                                type="text"
+                                placeholder="Заголовок"
+                            />
+                            <ErrorMessage component="div" name="title" className="alert alert-danger col-md-4" style={{padding: "5px", marginBottom: "5px", marginTop: "5px", width: "100%"}}/>
+                        </div>
+                    </Row>
+                    <Row className="mb-3">
+                        <div className="col-md-6" style={error || success ? {marginBottom: "1rem"} : {}}>
+                            <label htmlFor="content">Содержание</label>
+                            <Field
+                                name="content"
+                                className="form-control"
+                                type="text"
+                                placeholder="Чем вы хотите поделиться?"
+                            />
+                            <ErrorMessage component="div" name="content" className="alert alert-danger col-md-4" style={{padding: "5px", marginBottom: "5px", marginTop: "5px", width: "100%"}}/>
+                        </div>
+                        <div>
+                            {error ? <div className="alert alert-danger col-md-4" style={{padding: "5px", marginBottom: "0"}}>
+                                {error}
+                            </div> : null}
+                            {success ? <div className="alert alert-success col-md-4" style={{padding: "5px", marginBottom: "0"}}>
+                                {success}.
+                                <div>
+                                    <NavLink className="alert-link" to={"/login"}>
+                                        Необходимо войти
+                                    </NavLink>
+                                </div>
+                            </div> : null}
+                        </div>
+                    </Row>
+                    <div className="col-md-4">
+                        <Button type="submit">Опубликовать</Button>
+                        <Row className="mb-3">
+                        </Row>
+                    </div>
+                </Form>
+            </Formik>
         </div>
     )
 }
 
-export default AddPost;
+export default AddPost

@@ -1,74 +1,89 @@
-import {Form, Button, Row, Col} from "react-bootstrap"
-import {useState} from "react";
+import {Button, Row} from "react-bootstrap"
+import React, {useState} from "react";
 import {NavLink} from "react-router-dom";
 import {connect} from "react-redux";
-import {login, registration} from "../../reducers/auth-reducer";
+import {login} from "../../reducers/auth-reducer";
+import {Navigate} from "react-router";
+import {Field, Formik, Form, ErrorMessage} from "formik";
+import * as Yup from "yup"
+
 
 const Login = (props) => {
-    const [validated, setValidated] = useState(false)
-    const [username, setUsername] = useState("")
-    const [password, setPassword] = useState("")
+    const [error, setError] = useState("")
 
-    const usernameHandler = (e) => {
-        setUsername(e.target.value)
-    }
+    const SignupSchema = Yup.object().shape({
+        username: Yup.string()
+            .required('Обязательное поле'),
+        password: Yup.string()
+            .required('Обязательное поле')
+    });
 
-    const passwordHandler = (e) => {
-        setPassword(e.target.value)
-    }
-
-    const handleSubmit = (event) => {
-        event.preventDefault()
-        const form = event.currentTarget
-        if (form.checkValidity() === true) {
-            props.login(username, password)
-        }
-        setValidated(true)
+    if (props.isAuth) {
+        return <Navigate repalce to={"/posts"}/>
     }
 
     return (
         <div>
             <h1>Войти</h1>
-            <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                <Row className="mb-3">
-                    <Form.Group as={Col} md="4" controlId="validationCustom01">
-                        <Form.Label>Логин</Form.Label>
-                        <Form.Control
-                            required
-                            type="text"
-                            placeholder="Имя пользователя"
-                            defaultValue=""
-                            onChange={usernameHandler}
-                            value={username}
-                        />
-                        <Form.Control.Feedback type={"invalid"}>Неверное имя пользователя</Form.Control.Feedback>
-                    </Form.Group>
-                </Row>
-                <Row className="mb-3">
-                    <Form.Group as={Col} md="4" controlId="validationCustom03">
-                        <Form.Label>Пароль</Form.Label>
-                        <Form.Control type="password" placeholder="Введите пароль" required onChange={passwordHandler} value={password}/>
-                        <Form.Control.Feedback type="invalid">
-                            Неправильный пароль
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                </Row>
-                <Form.Group as={Col} md="4" controlId="validationCustom03">
-                    <Button type="submit">Войти</Button>
+            <Formik initialValues={{username: '', password: '',}}
+                    validationSchema={SignupSchema}
+                    onSubmit={values => {
+                        console.log(values)
+                        props.login(values.username, values.password)
+                            .then(error => {
+                                console.log(error)
+                                setError(error)
+                            })
+                    }}>
+                <Form>
                     <Row className="mb-3">
-                        <Form.Text className="text-muted">
-                            Нет аккаунта? <NavLink style={{textDecoration: "none"}} to={'/register'}>Зарегистрироваться</NavLink>
-                        </Form.Text>
+                        <div className="col-md-4">
+                            <label htmlFor="username">Логин</label>
+                            <Field
+                                name="username"
+                                className="form-control"
+                                type="text"
+                                placeholder="Имя пользователя"
+                            />
+                            <ErrorMessage component="div" name="username" className="alert alert-danger col-md-4" style={{padding: "5px", marginBottom: "5px", marginTop: "5px", width: "100%"}}/>
+                        </div>
                     </Row>
-                </Form.Group>
-            </Form>
+                    <Row className="mb-3">
+                        <div className="col-md-4" style={error ? {marginBottom: "1rem"} : {}}>
+                            <label htmlFor="password">Пароль</label>
+                            <Field
+                                id="password"
+                                name="password"
+                                className="form-control"
+                                type="password"
+                                placeholder="Введите пароль"
+                            />
+                            <ErrorMessage component="div" name="password" className="alert alert-danger col-md-4" style={{padding: "5px", marginBottom: "5px", marginTop: "5px", width: "100%"}}/>
+                        </div>
+                        <div>
+                            {error ? <div className="alert alert-danger col-md-4" style={{padding: "5px", marginBottom: "0"}}>
+                                {error}
+                            </div> : null}
+                        </div>
+                    </Row>
+                    <div className="col-md-4">
+                        <Button type="submit">Войти</Button>
+                        <Row className="mb-3">
+                            <span className="text-muted">
+                                Нет аккаунта? <NavLink style={{textDecoration: "none"}}
+                                                       to={'/register'}>Зарегистрироваться</NavLink>
+                            </span>
+                        </Row>
+                    </div>
+                </Form>
+            </Formik>
         </div>
-    );
+    )
 }
 
 const mapStateToProps = (state) => {
     return {
-
+        isAuth: state.auth.isAuth
     }
 }
 

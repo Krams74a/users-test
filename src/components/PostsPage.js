@@ -1,8 +1,11 @@
 import React, {Component} from "react";
 import {addNewPost, addPost, deletePost, deletePostAction, getPosts} from "../reducers/posts-reducer";
 import {connect} from "react-redux";
-import User from "./User";
+import Post from "./Post";
 import AddPost from "./AddPost";
+import {withAuthRedirect} from "../hoc/withAuthRedirect";
+import {compose} from "redux";
+import AddPostContainer from "./AddPost";
 
 export class PostsPage extends Component {
     componentDidMount() {
@@ -10,14 +13,15 @@ export class PostsPage extends Component {
     }
 
     render() {
-        if (!this.props.usersInfo) return <div>Loading...</div>
+        if (!this.props.postsInfo) return <div>Loading...</div>
         return (
             <div>
-                <AddPost addPost={this.props.addPost} addNewPost={this.props.addNewPost}/>
-                {this.props.usersInfo.reverse().map(u => <User id={u._id} key={u._id} author={u.author} title={u.title}
-                                                               content={u.content} picture={u.picture}
-                                                               deletePost={this.props.deletePost}
-                                                               deletePostAction={this.props.deletePostAction}/>)}
+                <h1>Посты других пользователей</h1>
+                <AddPost addPost={this.props.addPost} addNewPost={this.props.addNewPost} loggedUserInfo={this.props.loggedUserInfo}/>
+                {this.props.postsInfo.reverse().map(post => <Post id={post._id} key={post._id} author={post.author} title={post.title}
+                                                                  content={post.content} picture={post.picture}
+                                                                  deletePost={this.props.deletePost}
+                                                                  deletePostAction={this.props.deletePostAction}/>)}
             </div>
         )
     }
@@ -25,10 +29,15 @@ export class PostsPage extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        usersInfo: state.users.usersInfo
+        postsInfo: state.posts.postsInfo,
+        isAuth: state.auth.isAuth,
+        loggedUserInfo: state.auth.loggedUserInfo
     }
 }
 
-const PostsContainer = connect(mapStateToProps, {getPosts, addPost, deletePost, addNewPost, deletePostAction})(PostsPage);
+const PostsContainer = compose(
+    connect(mapStateToProps, {getPosts, addPost, deletePost, addNewPost, deletePostAction}),
+    withAuthRedirect
+)(PostsPage)
 
 export default PostsContainer;
