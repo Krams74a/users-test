@@ -11,6 +11,7 @@ import {initializeApp} from "./reducers/app-reducer";
 import Preloader from "./components/Preloader/Preloader";
 import HeaderContainer from "./components/Header/Header";
 import UsersContainer from "./components/Users/UsersPage";
+import ProfileContainer from "./components/Profile/ProfilePage";
 
 class App extends React.Component {
     componentDidMount() {
@@ -18,16 +19,18 @@ class App extends React.Component {
     }
 
     render() {
-        if (!this.props.initialized) return <Preloader />
+        if (!this.props.initialized) return <Preloader/>
         return (
             <HashRouter>
                 <HeaderContainer/>
                 <div className={styles.content}>
                     <Routes>
-                            <Route path='posts' element={<PostsContainer/>}/>
-                            <Route path='login' element={<LoginContainer/>}/>
-                            <Route path='register' element={<RegisterContainer/>}/>
-                            <Route path='users' element={<UsersContainer />}/>
+                        <Route path='profile' element={<ProfileContainer/>}/>
+                        <Route path='' element={<ProfileContainer/>}/>
+                        <Route path='posts' element={<PostsContainer/>}/>
+                        <Route path='login' element={<LoginContainer/>}/>
+                        <Route path='register' element={<RegisterContainer/>}/>
+                        <Route path='users' element={<UsersContainer/>}/>
                     </Routes>
                 </div>
             </HashRouter>
