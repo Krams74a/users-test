@@ -8,7 +8,7 @@ export const Post = (props) => {
 
     return (
         <div>
-            <Card style={{ width: '25rem', marginBottom: "10px"}}>
+            <Card style={{ width: '25rem', marginBottom: "10px", backgroundColor: "#f3f3f3"}}>
                 <Card.Body>
                     <Card.Title>{props.title}</Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">{props.author}</Card.Subtitle>

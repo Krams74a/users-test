@@ -4,7 +4,7 @@ import {Card} from "react-bootstrap";
 export const User = (props) => {
     return (
         <div>
-            <Card style={{ width: '25rem', marginBottom: "10px"}}>
+            <Card style={{ width: '25rem', marginBottom: "10px", backgroundColor: "#f3f3f3"}}>
                 <Card.Body>
                     <Card.Title>{props.username}</Card.Title>
                     <Card.Subtitle>{props.roles.map(role => {
