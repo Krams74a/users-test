@@ -22,7 +22,6 @@ export const setUsers = (users) => ({type: SET_USERS, users})
 
 export const getUsers = () => async (dispatch) => {
     let data = await usersAPI.getUsers()
-    console.log(data)
     dispatch(setUsers(data))
 }
 

@@ -1,11 +1,11 @@
 import React, {Component} from "react";
-import {addNewPost, addPost, deletePost, deletePostAction, getPosts} from "../reducers/posts-reducer";
+import {addNewPost, addPost, deletePost, deletePostAction, getPosts} from "../../reducers/posts-reducer";
 import {connect} from "react-redux";
-import Post from "./Post";
-import AddPost from "./AddPost";
-import {withAuthRedirect} from "../hoc/withAuthRedirect";
+import Post from "./Post/Post";
+import AddPost from "./AddPost/AddPost";
+import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
-import AddPostContainer from "./AddPost";
+import AddPostContainer from "./AddPost/AddPost";
 
 export class PostsPage extends Component {
     componentDidMount() {

@@ -1,8 +1,8 @@
 import * as axios from "axios";
 
 const axiosInstance = axios.create({
-    baseURL: "https://mongodb-test-two.vercel.app/api"
-    //baseURL: "http://localhost:5000/api",
+    //baseURL: "https://mongodb-test-two.vercel.app/api"
+    baseURL: "http://localhost:5000/api",
 })
 
 export const postsAPI = {
@@ -48,4 +48,10 @@ export const usersAPI = {
                 return response.data
             })
     },
+}
+
+export const profileAPI = {
+    getProfile(id) {
+        return axiosInstance.get(`/profile/${id}`)
+    }
 }

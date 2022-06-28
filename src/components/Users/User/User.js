@@ -1,14 +1,41 @@
-import React from "react";
-import {Card} from "react-bootstrap";
+import React, {useState} from "react";
+import {Card, Badge} from "react-bootstrap";
+import {useNavigate} from "react-router";
 
 export const User = (props) => {
+    const navigate = useNavigate();
+    const [isHovering, setIsHovering] = useState(false)
+
+    const navigateToUser = (username) => {
+        navigate("/profile/" + username)
+    }
+
+    const handleMouseEnter = () => {
+        setIsHovering(true);
+    };
+
+    const handleMouseLeave = () => {
+        setIsHovering(false);
+    };
+
     return (
         <div>
-            <Card style={{ width: '25rem', marginBottom: "10px", backgroundColor: "#f3f3f3"}}>
+            <Card style={{width: '25rem', marginBottom: "10px", backgroundColor: "#f3f3f3"}}>
                 <Card.Body>
-                    <Card.Title>{props.username}</Card.Title>
+                    <Card.Title onClick={() => navigateToUser(props.username)}><span
+                        style={{cursor: "pointer", textDecoration: isHovering ? 'underline' : ''}}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave} onClick={() => navigateToUser(props.author)}>
+                            {props.username}
+                        </span></Card.Title>
                     <Card.Subtitle>{props.roles.map(role => {
-                        return role
+                        {
+                            if (role === "ADMIN") {
+                                return <Badge bg="primary">{role}</Badge>
+                            } else {
+                                return <Badge bg="secondary">{role}</Badge>
+                            }
+                        }
                     })}</Card.Subtitle>
                 </Card.Body>
             </Card>

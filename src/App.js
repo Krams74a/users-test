@@ -1,6 +1,6 @@
 import './App.module.css';
 import React from "react";
-import PostsContainer from "./components/PostsPage";
+import PostsContainer from "./components/Posts/PostsPage";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from "./App.module.css"
 import {BrowserRouter, HashRouter, Route, Routes} from "react-router-dom";
@@ -12,6 +12,7 @@ import Preloader from "./components/Preloader/Preloader";
 import HeaderContainer from "./components/Header/Header";
 import UsersContainer from "./components/Users/UsersPage";
 import ProfileContainer from "./components/Profile/ProfilePage";
+import {Navigate} from "react-router";
 
 class App extends React.Component {
     componentDidMount() {
@@ -25,8 +26,9 @@ class App extends React.Component {
                 <HeaderContainer/>
                 <div className={styles.content}>
                     <Routes>
+                        <Route path='' element={<Navigate replace to={"/profile"}/>}/>
+                        <Route path='profile/:id' element={<ProfileContainer/>}/>
                         <Route path='profile' element={<ProfileContainer/>}/>
-                        <Route path='' element={<ProfileContainer/>}/>
                         <Route path='posts' element={<PostsContainer/>}/>
                         <Route path='login' element={<LoginContainer/>}/>
                         <Route path='register' element={<RegisterContainer/>}/>
