@@ -7,9 +7,11 @@ const AvatarCard = ({avatar, username, status, address, loggedUserInfoUsername, 
         friendsList.forEach(friend => {
             if (friend.username === username) {
                 setIsFriend(true)
+            } else {
+                setIsFriend(false)
             }
         })
-    }, [])
+    }, [username])
 
     const addFriendHandler = (friendId, userId) => {
         addFriend(friendId, userId)

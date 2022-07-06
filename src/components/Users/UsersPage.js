@@ -4,6 +4,7 @@ import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
 import {getUsers} from "../../reducers/users-reducer";
 import User from "./User/User";
+import Preloader from "../Preloader/Preloader";
 
 export class UsersPage extends Component {
     componentDidMount() {
@@ -11,12 +12,13 @@ export class UsersPage extends Component {
     }
 
     render() {
-        if (!this.props.usersList) return <div>Loading...</div>
+        if (!this.props.usersList) return <Preloader/>
         return (
             <div>
                 <h1>Пользователи</h1>
                 {[...this.props.usersList].reverse().map((user, key) => {
-                    return <User profile={user.profile} id={key} key={key} username={user.username} roles={user.roles}/>})}
+                    return <User profile={user.profile} id={key} key={key} username={user.username} roles={user.roles}/>
+                })}
             </div>
         )
     }

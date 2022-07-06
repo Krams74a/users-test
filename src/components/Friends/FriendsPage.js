@@ -13,7 +13,7 @@ const FriendsPage = (props) => {
         props.getFriends(userId)
     }, [])
     if (!props.friendsList) return <div>Loading...</div>
-    if (props.friendsList.length === 0) return <div>У вас пока нет друзей...</div>
+    if (props.friendsList.length === 0) return <div>У вас пока нет подписок...</div>
     return (
         <div>
             <h1>Мои подписки</h1>

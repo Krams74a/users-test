@@ -26,6 +26,7 @@ const ProfilePage = (props) => {
     if (!props.profileInfo || !props.friendsList) return <Preloader/>
     if (error) return <div>Пользователя с данным именем не существует. Вы можете создать свою <NavLink
         to={"/register"}>страницу.</NavLink></div>
+    if (!(props.profileInfo.username === userId)) return <Preloader />
     return (
         <div className="container">
             <h1>Профиль</h1>
