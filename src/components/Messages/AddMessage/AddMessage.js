@@ -4,45 +4,26 @@ import {NavLink} from "react-router-dom";
 import {Field, Formik, Form, ErrorMessage} from "formik";
 import * as Yup from "yup"
 
-const AddPost = (props) => {
+const AddMessage = (props) => {
     const [error, setError] = useState("")
     const [success, setSuccess] = useState("")
 
     const SignupSchema = Yup.object().shape({
-        title: Yup.string()
-            .required('Обязательное поле'),
         content: Yup.string()
             .required('Обязательное поле')
     })
 
     return (
         <div>
-            <Formik initialValues={{title: '', content: '',}}
+            <Formik initialValues={{content: ''}}
                     validationSchema={SignupSchema}
                     onSubmit={(values, {resetForm}) => {
-                        props.addPost(props.loggedUserInfo.username, values.title, values.content)
-                            .then(messageAndStatus => {
-                                if(messageAndStatus.status === 200) {
-                                    setSuccess(messageAndStatus.message)
-                                    resetForm({})
-                                } else {
-                                    setError(messageAndStatus.message)
-                                }
-                            })
+                        props.sendMessage(props.loggedUserInfo.username, values.content)
+                        setError("")
+                        setSuccess("")
+                        resetForm({})
                     }}>
                 <Form>
-                    <Row className="mb-3">
-                        <div className="col-md-6">
-                            <label htmlFor="title">Заголовок</label>
-                            <Field
-                                name="title"
-                                className="form-control"
-                                type="text"
-                                placeholder="Заголовок"
-                            />
-                            <ErrorMessage component="div" name="title" className="alert alert-danger col-md-4" style={{padding: "5px", marginBottom: "5px", marginTop: "5px", width: "100%"}}/>
-                        </div>
-                    </Row>
                     <Row className="mb-3">
                         <div className="col-md-6" style={error || success ? {marginBottom: "1rem"} : {}}>
                             <label htmlFor="content">Содержание</label>
@@ -79,4 +60,4 @@ const AddPost = (props) => {
     )
 }
 
-export default AddPost
+export default AddMessage

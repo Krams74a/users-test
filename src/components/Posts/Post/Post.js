@@ -1,8 +1,9 @@
 import React, {useState} from "react";
-import {Card, Button} from "react-bootstrap";
+import {Button, Card} from "react-bootstrap";
 import {useNavigate} from "react-router";
 
 export const Post = (props) => {
+
     const deletePostHandler = (id) => {
         props.deletePost(id)
     }
@@ -38,6 +39,7 @@ export const Post = (props) => {
                     <Card.Text>
                         {props.content}
                     </Card.Text>
+                    {props.loggedUsername === props.author ? <Button variant={"danger"} onClick={() => deletePostHandler(props.id)}>Удалить</Button> : null}
                 </Card.Body>
             </Card>
         </div>

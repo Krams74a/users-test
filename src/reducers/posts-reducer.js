@@ -45,13 +45,25 @@ export const getPosts = () => async (dispatch) => {
 }
 
 export const addPost = (author, title, content) => async (dispatch) => {
-    let data = await postsAPI.addPost(author, title, content)
-    dispatch(getPosts())
+    let response = await postsAPI.addPost(author, title, content)
+    if (response.status === 200) {
+        dispatch(getPosts())
+        const messageAndStatus = {
+            message: response.data.message,
+            status: response.status
+        }
+        return messageAndStatus
+    } else {
+        const messageAndStatus = {
+            message: response.data.message,
+            status: response.status
+        }
+        return messageAndStatus
+    }
 }
 
 export const deletePost = (id) => async (dispatch) => {
-    let data = await postsAPI.deletePost(id)
-    console.log(data)
+    await postsAPI.deletePost(id)
     dispatch(getPosts())
 }
 

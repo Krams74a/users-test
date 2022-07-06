@@ -15,7 +15,8 @@ export class UsersPage extends Component {
         return (
             <div>
                 <h1>Пользователи</h1>
-                {[...this.props.usersList].reverse().map(user => <User id={user._id} key={user._id} username={user.username} roles={user.roles}/>)}
+                {[...this.props.usersList].reverse().map((user, key) => {
+                    return <User profile={user.profile} id={key} key={key} username={user.username} roles={user.roles}/>})}
             </div>
         )
     }

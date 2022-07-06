@@ -5,7 +5,6 @@ import Post from "./Post/Post";
 import AddPost from "./AddPost/AddPost";
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
-import AddPostContainer from "./AddPost/AddPost";
 
 export class PostsPage extends Component {
     componentDidMount() {
@@ -21,7 +20,7 @@ export class PostsPage extends Component {
                 {[...this.props.postsInfo].reverse().map(post => <Post id={post._id} key={post._id} author={post.author} title={post.title}
                                                                   content={post.content} picture={post.picture}
                                                                   deletePost={this.props.deletePost}
-                                                                  deletePostAction={this.props.deletePostAction}/>)}
+                                                                  deletePostAction={this.props.deletePostAction} loggedUsername={this.props.loggedUserInfo.username}/>)}
             </div>
         )
     }

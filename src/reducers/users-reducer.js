@@ -1,4 +1,5 @@
 import {usersAPI} from "../api/api"
+import {logout} from "./auth-reducer";
 
 const SET_USERS = "users/SET_USERS"
 
@@ -23,6 +24,11 @@ export const setUsers = (users) => ({type: SET_USERS, users})
 export const getUsers = () => async (dispatch) => {
     let data = await usersAPI.getUsers()
     dispatch(setUsers(data))
+}
+
+export const deleteUser = (id) => async (dispatch) => {
+    let data = await usersAPI.deleteUser(id)
+    dispatch(logout())
 }
 
 export default usersReducer;

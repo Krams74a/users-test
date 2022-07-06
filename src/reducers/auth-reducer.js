@@ -37,9 +37,7 @@ export const setIsAuth = (booleanValue) => ({type: SET_IS_AUTH, booleanValue})
 
 export const registration = (username, password) => async (dispatch) => {
     let data = await authAPI.registration(username, password)
-    console.log(data)
     if (data.status !== 200) {
-        console.log(data.data.message)
         const response = {
             message: data.data.message,
             status: data.status

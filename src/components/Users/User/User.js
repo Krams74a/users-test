@@ -22,19 +22,19 @@ export const User = (props) => {
         <div>
             <Card style={{width: '25rem', marginBottom: "10px", backgroundColor: "#f3f3f3"}}>
                 <Card.Body>
-                    <Card.Title onClick={() => navigateToUser(props.username)}><span
-                        style={{cursor: "pointer", textDecoration: isHovering ? 'underline' : ''}}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave} onClick={() => navigateToUser(props.author)}>
+                    <Card.Title onClick={() => navigateToUser(props.username)}>
+                        <span
+                            style={{cursor: "pointer", textDecoration: isHovering ? 'underline' : ''}}
+                            onMouseEnter={handleMouseEnter}
+                            onMouseLeave={handleMouseLeave} onClick={() => navigateToUser(props.author)}>
                             {props.username}
-                        </span></Card.Title>
-                    <Card.Subtitle>{props.roles.map(role => {
-                        {
-                            if (role === "ADMIN") {
-                                return <Badge bg="primary">{role}</Badge>
-                            } else {
-                                return <Badge bg="secondary">{role}</Badge>
-                            }
+                        </span>
+                    </Card.Title>
+                    <Card.Subtitle>{props.roles.map((role, id) => {
+                        if (role === "ADMIN") {
+                            return <Badge bg="primary" key={id}>{role}</Badge>
+                        } else {
+                            return <Badge bg="secondary" key={id}>{role}</Badge>
                         }
                     })}</Card.Subtitle>
                 </Card.Body>

@@ -19,7 +19,7 @@ const Login = (props) => {
     });
 
     if (props.isAuth) {
-        return <Navigate repalce to={"/posts"}/>
+        return <Navigate repalce to={"/profile/"+props.loggedUserInfo.username}/>
     }
 
     return (
@@ -28,10 +28,8 @@ const Login = (props) => {
             <Formik initialValues={{username: '', password: '',}}
                     validationSchema={SignupSchema}
                     onSubmit={values => {
-                        console.log(values)
                         props.login(values.username, values.password)
                             .then(error => {
-                                console.log(error)
                                 setError(error)
                             })
                     }}>
@@ -83,7 +81,8 @@ const Login = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        isAuth: state.auth.isAuth
+        isAuth: state.auth.isAuth,
+        loggedUserInfo: state.auth.loggedUserInfo
     }
 }
 

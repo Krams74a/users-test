@@ -2,7 +2,7 @@ import {Button, Row} from "react-bootstrap"
 import React, {useState} from "react";
 import {NavLink} from "react-router-dom";
 import {connect} from "react-redux";
-import {login, registration} from "../../reducers/auth-reducer";
+import {registration} from "../../reducers/auth-reducer";
 import {Navigate} from "react-router";
 import {Field, Formik, Form, ErrorMessage} from "formik";
 import * as Yup from "yup"
@@ -21,7 +21,7 @@ const Register = (props) => {
     });
 
     if (props.isAuth) {
-        return <Navigate repalce to={"/posts"}/>
+        return <Navigate repalce to={"/profile"}/>
     }
 
     return (
@@ -81,7 +81,7 @@ const Register = (props) => {
                         </div>
                     </Row>
                     <div className="col-md-4">
-                        <Button type="submit">Войти</Button>
+                        <Button type="submit">Зарегистрироваться</Button>
                         <Row className="mb-3">
                             <span className="text-muted">
                                 Есть аккаунт? <NavLink style={{textDecoration: "none"}}

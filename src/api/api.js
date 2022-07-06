@@ -1,8 +1,9 @@
 import * as axios from "axios";
 
 const axiosInstance = axios.create({
-    //baseURL: "https://mongodb-test-two.vercel.app/api"
-    baseURL: "http://localhost:5000/api",
+    //baseURL: "https://mongodb-test-two.vercel.app/api",
+    //baseURL: "http://localhost:5000/api",
+    baseURL: "https://dry-meadow-99203.herokuapp.com/api"
 })
 
 export const postsAPI = {
@@ -15,7 +16,10 @@ export const postsAPI = {
     addPost(author, title, content) {
         return axiosInstance.post(`/posts`, {author, title, content})
             .then(response => {
-                return response.data
+                return response
+            })
+            .catch((error) => {
+                return error.response
             })
     },
     deletePost(id) {
@@ -48,10 +52,88 @@ export const usersAPI = {
                 return response.data
             })
     },
+    deleteUser(id) {
+        return axiosInstance.delete(`/user/${id}`)
+            .then(response => {
+                return response.data
+            })
+    }
 }
 
 export const profileAPI = {
     getProfile(id) {
         return axiosInstance.get(`/profile/${id}`)
+            .then(response => {
+                return response
+            })
+            .catch((error) => {
+                return error.response
+            })
+    },
+    updateProfile(profile) {
+        return axiosInstance.put(`/profile`, profile)
+    },
+    updateAvatar(avatar, id) {
+        let formData = new FormData();
+        formData.append("avatar", avatar);
+        formData.append("id", id);
+
+        return axiosInstance.put(`/profile/avatar`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            }
+        })
+    },
+    deleteAvatar(id) {
+        return axiosInstance.put(`/profile/deleteAvatar`, {id})
+    },
+    /*getAvatar(avatarName) {
+        console.log(avatarName)
+        return axiosInstance.get(`https://dry-meadow-99203.herokuapp.com/${avatarName}`)
+            .then(response => {
+                return response.data
+            })
+    }*/
+}
+
+export const messagesAPI = {
+    getMessages() {
+        return axiosInstance.get(`/messages`)
+    },
+    getNewMessages() {
+        return axiosInstance.get(`/newMessages`)
+    },
+    sendMessage(author, content) {
+        return axiosInstance.post(`/messages`, {author, content})
+    }
+}
+
+export const friendsAPI = {
+    addFriend(friendId, userId) {
+        return axiosInstance.post(`/friends/add`, {friendId, userId})
+            .then(response => {
+                return response
+            })
+            .catch((error) => {
+                return error.response
+            })
+    },
+    deleteFriend(friendId, userId) {
+        return axiosInstance.post(`/friends/delete`, {friendId, userId})
+            .then(response => {
+                return response
+            })
+            .catch((error) => {
+                return error.response
+            })
+    },
+    getFriends(userId) {
+        return axiosInstance.get(`/friends/${userId}`)
+            .then(response => {
+                return response
+            })
+            .catch((error) => {
+                return error.response
+            })
     }
 }

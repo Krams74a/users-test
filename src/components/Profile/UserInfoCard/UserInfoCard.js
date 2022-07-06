@@ -1,6 +1,13 @@
 import React from "react";
+import {useNavigate} from "react-router-dom";
 
-const UserInfoCard = ({fullname, birthday, email, phoneNumber, address}) => {
+const UserInfoCard = ({loggedUserInfo, username, fullname, sex, birthday, email, phoneNumber, address}) => {
+    const navigate = useNavigate()
+
+    const navigateToSettings = () => {
+        navigate("/settings")
+    }
+
     return (
         <div className="card mb-3" style={{backgroundColor: "#f3f3f3"}}>
             <div className="card-body">
@@ -10,6 +17,14 @@ const UserInfoCard = ({fullname, birthday, email, phoneNumber, address}) => {
                     </div>
                     <div className="col-sm-9 text-secondary">
                         {fullname || "Отсутствует"}
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-sm-3">
+                        <h6 className="mb-0">Пол</h6>
+                    </div>
+                    <div className="col-sm-9 text-secondary">
+                        {!sex ? "Не указан" : sex === "male" ? "Мужской" : "Женский"}
                     </div>
                 </div>
                 <div className="row">
@@ -44,11 +59,16 @@ const UserInfoCard = ({fullname, birthday, email, phoneNumber, address}) => {
                         {address || "Отсутствует"}
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-sm-12" style={{marginTop: "10px"}}>
-                        <button className="btn btn-primary">Редактировать</button>
-                    </div>
-                </div>
+                {
+                    loggedUserInfo.username === username
+                        ? <div className="row">
+                            <div className="col-sm-12" style={{marginTop: "10px"}}>
+                                <button className="btn btn-primary" onClick={navigateToSettings}>Редактировать</button>
+                            </div>
+                        </div>
+                        : null
+                }
+
             </div>
         </div>
     )
