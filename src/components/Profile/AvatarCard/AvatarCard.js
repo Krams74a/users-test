@@ -1,26 +1,84 @@
 import React, {useEffect, useState} from "react";
 import AvatarPlaceholder from "../../../assets/avatar-placeholder.png"
 
-const AvatarCard = ({avatar, username, status, address, loggedUserInfoUsername, addFriend, deleteFriend, friendsList}) => {
+const AvatarCard = ({avatar, username, status, address, loggedUserInfoUsername, addFriend, deleteFriend, friendsList, addFriendCandidate, friendsCandidates, deleteFriendsCandidate}) => {
+    const [isCandidate, setIsCandidate] = useState(false)
+    const [isSender, setIsSender] = useState(false)
     const [isFriend, setIsFriend] = useState(false)
+    console.log(isCandidate, isSender, isFriend)
     useEffect(() => {
-        friendsList.forEach(friend => {
-            if (friend.username === username) {
-                setIsFriend(true)
-            } else {
-                setIsFriend(false)
+        friendsCandidates.forEach(friendRequest => {
+            if (friendRequest.recipient === username) {
+                setIsCandidate(true)
+            }
+            if (friendRequest.sender === username) {
+                setIsSender(true)
             }
         })
-    }, [username])
+        friendsCandidates.forEach(friend => {
+            if (friend.username === username) {
+                setIsFriend(true)
+            }
+        })
+    }, [])
 
-    const addFriendHandler = (friendId, userId) => {
+    const acceptFriendHandler = (friendId, userId) => {
         addFriend(friendId, userId)
+        addFriend(userId, friendId)
+        deleteFriendsCandidate(userId, friendId)
         setIsFriend(true)
+        setIsSender(false)
+        setIsCandidate(false)
     }
 
     const deleteFriendHandler = (friendId, userId) => {
         deleteFriend(friendId, userId)
         setIsFriend(false)
+        setIsSender(false)
+        setIsCandidate(false)
+    }
+
+    const addFriendCandidateHandler = (friendId, userId) => {
+        addFriendCandidate(friendId, userId)
+        setIsCandidate(true)
+    }
+
+    const deleteFriendCandidateHandler = (friendId, userId) => {
+        deleteFriendsCandidate(friendId, userId)
+        setIsCandidate(false)
+        setIsSender(false)
+    }
+
+    const buttonTextChanger = () => {
+        if (isSender) {
+            return "Принять заявку"
+        } else {
+            if (isCandidate) {
+                return "Отменить заявку"
+            } else {
+                if (isFriend) {
+                    return "Удалить из друзей"
+                } else {
+                    return "Добавить в друзья"
+                }
+            }
+        }
+    }
+
+    const buttonHandlerChanger = () => {
+        if (isSender) {
+            acceptFriendHandler(username, loggedUserInfoUsername)
+        } else {
+            if (isCandidate) {
+                deleteFriendCandidateHandler(username, loggedUserInfoUsername)
+            } else {
+                if (isFriend) {
+                    deleteFriendHandler(username, loggedUserInfoUsername)
+                } else {
+                    addFriendCandidateHandler(username, loggedUserInfoUsername)
+                }
+            }
+        }
     }
 
     return (
@@ -49,14 +107,12 @@ const AvatarCard = ({avatar, username, status, address, loggedUserInfoUsername, 
                         <p className="text-secondary mb-1">{status || "Отсутствует"}</p>
                         <p className="text-muted font-size-sm">{address || "Отсутствует"}</p>
                         {!(loggedUserInfoUsername === username)
-                            ? !isFriend ? <button className="btn btn-primary" style={{marginRight: "10px"}}
-                                                  onClick={() => addFriendHandler(username, loggedUserInfoUsername)}>Подписаться</button> :
-                                <button className="btn btn-danger" style={{marginRight: "10px"}}
-                                        onClick={() => deleteFriendHandler(username, loggedUserInfoUsername)}>Отписаться</button>
+                            ? <button className="btn btn-primary" style={{marginRight: "10px"}}
+                                      onClick={buttonHandlerChanger}>{buttonTextChanger()}</button>
                             : null
                         }
-                        {!(loggedUserInfoUsername === username) ?
-                            <button className="btn btn-outline-primary">Сообщение</button> : null}
+                        {/*{!(loggedUserInfoUsername === username) ?
+                            <button className="btn btn-outline-primary">Сообщение</button> : null}*/}
                     </div>
                 </div>
             </div>

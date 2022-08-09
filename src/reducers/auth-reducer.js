@@ -54,14 +54,12 @@ export const registration = (username, password) => async (dispatch) => {
 
 export const login = (username, password) => async (dispatch) => {
     let data = await authAPI.login(username, password)
-    console.log(data)
     if (!data.status) {
         localStorage.setItem("token", data.token)
         const myDecodedToken = decodeToken(data.token)
         dispatch(setLoggedUserData(myDecodedToken))
         dispatch(setIsAuth(true))
     } else {
-        console.log(data.data.message)
         return data.data.message
     }
 }
@@ -73,7 +71,6 @@ export const isAuth = () => async (dispatch) => {
         dispatch(setLoggedUserData(myDecodedToken))
         dispatch(setIsAuth(true))
     } else {
-        console.log("Пользователь не залогинен")
         dispatch(setLoggedUserData({username:"", id:""}))
         dispatch(setIsAuth(false))
     }

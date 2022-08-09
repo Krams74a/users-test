@@ -16,11 +16,16 @@ export class PostsPage extends Component {
         return (
             <div>
                 <h1>Посты других пользователей</h1>
-                <AddPost addPost={this.props.addPost} addNewPost={this.props.addNewPost} loggedUserInfo={this.props.loggedUserInfo}/>
-                {[...this.props.postsInfo].reverse().map(post => <Post id={post._id} key={post._id} author={post.author} title={post.title}
-                                                                  content={post.content} picture={post.picture}
-                                                                  deletePost={this.props.deletePost}
-                                                                  deletePostAction={this.props.deletePostAction} loggedUsername={this.props.loggedUserInfo.username}/>)}
+                <AddPost addPost={this.props.addPost} addNewPost={this.props.addNewPost}
+                         loggedUserInfo={this.props.loggedUserInfo}/>
+                {[...this.props.postsInfo].reverse().map(post => <Post id={post._id} key={post._id} author={post.author}
+                                                                       title={post.title}
+                                                                       content={post.content} picture={post.picture}
+                                                                       deletePost={this.props.deletePost}
+                                                                       deletePostAction={this.props.deletePostAction}
+                                                                       loggedUsername={this.props.loggedUserInfo.username}
+                                                                       authorProfile={post.authorProfile}
+                                                                       created={post.created}/>)}
             </div>
         )
     }

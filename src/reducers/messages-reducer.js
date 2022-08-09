@@ -29,13 +29,11 @@ export const setNewMessage = (newMessage) => ({type: NEW_MESSAGE, newMessage})
 
 export const getMessages = () => async (dispatch) => {
     let data = await messagesAPI.getMessages()
-    console.log(data.data)
     dispatch(setMessages(data.data))
 }
 
 export const getNewMessages = () => async (dispatch) => {
     let data = await messagesAPI.getNewMessages()
-    console.log(data.data)
     dispatch(setNewMessage(data.data))
 }
 

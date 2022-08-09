@@ -9,7 +9,13 @@ import {getAvatar, getProfile} from "../../reducers/profile-reducer";
 import {NavLink} from "react-router-dom";
 import {useLocation} from "react-router";
 import Preloader from "../Preloader/Preloader";
-import {addFriend, deleteFriend, getFriends} from "../../reducers/friends-reducer";
+import {
+    addFriend,
+    addFriendCandidate,
+    deleteFriend, deleteFriendsCandidate,
+    getFriends,
+    getFriendsCandidates
+} from "../../reducers/friends-reducer";
 
 const ProfilePage = (props) => {
     const location = useLocation();
@@ -17,16 +23,14 @@ const ProfilePage = (props) => {
     const [error, setError] = useState()
     useEffect(() => {
         props.getProfile(userId)
-            .then(message => {
-                setError(message)
-            })
+        props.getFriendsCandidates(props.loggedUserInfo.username)
         props.getFriends(props.loggedUserInfo.username)
     }, [userId])
 
-    if (!props.profileInfo || !props.friendsList) return <Preloader/>
+    if (!props.profileInfo || !props.friendsList || !props.friendsCandidates) return <Preloader/>
     if (error) return <div>Пользователя с данным именем не существует. Вы можете создать свою <NavLink
         to={"/register"}>страницу.</NavLink></div>
-    if (!(props.profileInfo.username === userId)) return <Preloader />
+    if (!(props.profileInfo.username === userId)) return <Preloader/>
     return (
         <div className="container">
             <h1>Профиль</h1>
@@ -36,17 +40,22 @@ const ProfilePage = (props) => {
                         <AvatarCard username={props.profileInfo.username} status={props.profileInfo.status}
                                     address={props.profileInfo.address} avatar={props.profileInfo.avatarUrl}
                                     loggedUserInfoUsername={props.loggedUserInfo.username} addFriend={props.addFriend}
-                                    deleteFriend={props.deleteFriend} friendsList={props.friendsList}/>
+                                    deleteFriend={props.deleteFriend} friendsList={props.friendsList}
+                                    addFriendCandidate={props.addFriendCandidate}
+                                    friendsCandidates={props.friendsCandidates}
+                                    deleteFriendsCandidate={props.deleteFriendsCandidate}/>
                         <LinksCard website={props.profileInfo.website} github={props.profileInfo.github}
                                    facebook={props.profileInfo.facebook} instagram={props.profileInfo.instagram}
-                                   twitter={props.profileInfo.twitter}/>
+                                   twitter={props.profileInfo.twitter} isPublic={props.profileInfo.isPublic}
+                                   loggedUserInfo={props.loggedUserInfo} username={props.profileInfo.username}/>
                     </div>
                     <div className="col-md-8">
                         <UserInfoCard loggedUserInfo={props.loggedUserInfo} username={props.profileInfo.username}
                                       sex={props.profileInfo.sex} address={props.profileInfo.address}
                                       birthday={props.profileInfo.birthday} email={props.profileInfo.email}
                                       fullname={props.profileInfo.fullName}
-                                      phoneNumber={props.profileInfo.phoneNumber}/>
+                                      phoneNumber={props.profileInfo.phoneNumber}
+                                      isPublic={props.profileInfo.isPublic}/>
                         {/*<AdditionalInfoPage/>*/}
                     </div>
                 </div>
@@ -61,12 +70,21 @@ const mapStateToProps = (state) => {
         isAuth: state.auth.isAuth,
         loggedUserInfo: state.auth.loggedUserInfo,
         profileInfo: state.profile.profileInfo,
-        friendsList: state.friends.friendsList
+        friendsList: state.friends.friendsList,
+        friendsCandidates: state.friends.friendsCandidates
     }
 }
 
 const ProfileContainer = compose(
-    connect(mapStateToProps, {getProfile, addFriend, deleteFriend, getFriends}),
+    connect(mapStateToProps, {
+        getProfile,
+        addFriend,
+        deleteFriend,
+        getFriends,
+        addFriendCandidate,
+        getFriendsCandidates,
+        deleteFriendsCandidate
+    }),
     withAuthRedirect
 )(ProfilePage)
 

@@ -22,15 +22,12 @@ const FriendCard = (props) => {
     return (
         <Card style={{width: '25rem', marginBottom: "10px", backgroundColor: "#f3f3f3"}}>
             <Card.Body>
-                <Card.Title><span style={{cursor: "pointer", textDecoration: isHovering ? 'underline' : ''}}
-                                  onMouseEnter={handleMouseEnter}
-                                  onMouseLeave={handleMouseLeave} onClick={() => navigateToUser(props.username)}>
-                            {props.username}
-                        </span></Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">
-                    {props.status}
-                </Card.Subtitle>
-                <Button variant={"danger"} onClick={() => props.deleteFriend(props.username, props.loggedUserInfoUsername)}>Отписаться</Button>
+                    <div>
+                        Отправитель: {props.sender}
+                    </div>
+                    <div>
+                        Получатель: {props.recipient}
+                    </div>
             </Card.Body>
         </Card>
     )

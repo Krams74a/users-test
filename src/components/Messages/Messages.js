@@ -12,7 +12,6 @@ const MessagesPage = (props) => {
         props.getMessages()
         props.getNewMessages()
     }, [])
-    console.log(props)
     if (!props.messagesInfo) return <Preloader />
     return (
         <div>

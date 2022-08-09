@@ -9,15 +9,13 @@ const AddPost = (props) => {
     const [success, setSuccess] = useState("")
 
     const SignupSchema = Yup.object().shape({
-        title: Yup.string()
-            .required('Обязательное поле'),
         content: Yup.string()
             .required('Обязательное поле')
     })
 
     return (
         <div>
-            <Formik initialValues={{title: '', content: '',}}
+            <Formik initialValues={{content: '',}}
                     validationSchema={SignupSchema}
                     onSubmit={(values, {resetForm}) => {
                         props.addPost(props.loggedUserInfo.username, values.title, values.content)
@@ -31,18 +29,6 @@ const AddPost = (props) => {
                             })
                     }}>
                 <Form>
-                    <Row className="mb-3">
-                        <div className="col-md-6">
-                            <label htmlFor="title">Заголовок</label>
-                            <Field
-                                name="title"
-                                className="form-control"
-                                type="text"
-                                placeholder="Заголовок"
-                            />
-                            <ErrorMessage component="div" name="title" className="alert alert-danger col-md-4" style={{padding: "5px", marginBottom: "5px", marginTop: "5px", width: "100%"}}/>
-                        </div>
-                    </Row>
                     <Row className="mb-3">
                         <div className="col-md-6" style={error || success ? {marginBottom: "1rem"} : {}}>
                             <label htmlFor="content">Содержание</label>

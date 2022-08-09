@@ -29,9 +29,13 @@ class App extends React.Component {
                 <HeaderContainer/>
                 <div className={styles.content}>
                     <Routes>
-                        <Route path='' element={<Navigate replace to={`/profile/${this.props.loggedUserInfo.username}`}/>}/>
+                        <Route path='' element={this.props.loggedUserInfo.username ?
+                            <Navigate replace to={`/profile/${this.props.loggedUserInfo.username}`}/> :
+                            <Navigate replace to={`/login`}/>}/>
                         <Route path='profile/:id' element={<ProfileContainer/>}/>
-                        <Route path='profile' element={<Navigate replace to={`/profile/${this.props.loggedUserInfo.username}`}/>}/>
+                        <Route path='profile' element={this.props.loggedUserInfo.username ?
+                            <Navigate replace to={`/profile/${this.props.loggedUserInfo.username}`}/> :
+                            <Navigate replace to={`/login`}/>}/>
                         <Route path='posts' element={<PostsContainer/>}/>
                         <Route path='login' element={<LoginContainer/>}/>
                         <Route path='register' element={<RegisterContainer/>}/>

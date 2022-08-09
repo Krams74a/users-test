@@ -109,6 +109,15 @@ export const messagesAPI = {
 }
 
 export const friendsAPI = {
+    addFriendCandidate(friendId, userId) {
+        return axiosInstance.post(`/friends/addCandidate`, {friendId, userId})
+            .then(response => {
+                return response
+            })
+            .catch((error) => {
+                return error.response
+            })
+    },
     addFriend(friendId, userId) {
         return axiosInstance.post(`/friends/add`, {friendId, userId})
             .then(response => {
@@ -127,8 +136,26 @@ export const friendsAPI = {
                 return error.response
             })
     },
+    deleteFriendsCandidate(friendId, userId) {
+        return axiosInstance.post(`/friends/deleteFriendsCandidate`, {friendId, userId})
+            .then(response => {
+                return response
+            })
+            .catch((error) => {
+                return error.response
+            })
+    },
     getFriends(userId) {
         return axiosInstance.get(`/friends/${userId}`)
+            .then(response => {
+                return response
+            })
+            .catch((error) => {
+                return error.response
+            })
+    },
+    getFriendsCandidates(userId) {
+        return axiosInstance.get(`/friendsCandidates/${userId}`)
             .then(response => {
                 return response
             })

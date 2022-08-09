@@ -30,10 +30,8 @@ const Register = (props) => {
             <Formik initialValues={{username: '', password: '',}}
                     validationSchema={SignupSchema}
                     onSubmit={values => {
-                        console.log(values)
                         props.registration(values.username, values.password)
                             .then(response => {
-                                console.log(response)
                                 if(response.status === 200) {
                                     setSuccess(response.message)
                                 } else {
