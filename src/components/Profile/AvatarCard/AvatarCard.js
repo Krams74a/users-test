@@ -1,107 +1,73 @@
-import React, {useEffect, useState} from "react";
-import AvatarPlaceholder from "../../../assets/avatar-placeholder.png"
+import React from "react";
+import BigAvatar from "../../Avatar/User/BigAvatar/BigAvatar";
 
-const AvatarCard = ({avatar, username, status, address, loggedUserInfoUsername, addFriend, deleteFriend, friendsList, addFriendCandidate, friendsCandidates, deleteFriendsCandidate}) => {
-    const [isCandidate, setIsCandidate] = useState(false)
-    const [isSender, setIsSender] = useState(false)
-    const [isFriend, setIsFriend] = useState(false)
-    console.log(isCandidate, isSender, isFriend)
-    useEffect(() => {
-        friendsCandidates.forEach(friendRequest => {
-            if (friendRequest.recipient === username) {
-                setIsCandidate(true)
+const AvatarCard = ({getAllInfo, avatar, username, status, address, loggedUserInfoUsername, incomingRequests, profileFriends, profileIncomingRequests, sendIncomingRequest, stopIncomingRequest, applyIncomingRequest, removeFromFriends}) => {
+    const buttonHandlerChanger = () => {
+        if (profileIncomingRequests.length > 0) {
+            if (profileIncomingRequests.includes(loggedUserInfoUsername)) {
+                stopIncomingRequest(username, loggedUserInfoUsername)
+                getAllInfo()
+                return null
             }
-            if (friendRequest.sender === username) {
-                setIsSender(true)
+            stopIncomingRequest(username, loggedUserInfoUsername)
+            getAllInfo()
+            return null
+        }
+        if (incomingRequests.includes(username)) {
+            applyIncomingRequest(username, loggedUserInfoUsername)
+            getAllInfo()
+            return null
+        }
+        if (profileFriends.filter(friend => friend.username === loggedUserInfoUsername).length > 0) {
+            removeFromFriends(username, loggedUserInfoUsername)
+            getAllInfo()
+            return null
+        }
+        if ((profileFriends.filter(friend => friend.username === loggedUserInfoUsername).length === 0)) {
+            if (profileIncomingRequests) {
+                if (!(profileIncomingRequests.includes(loggedUserInfoUsername))) {
+                    sendIncomingRequest(username, loggedUserInfoUsername)
+                    getAllInfo()
+                    return null
+                }
             }
-        })
-        friendsCandidates.forEach(friend => {
-            if (friend.username === username) {
-                setIsFriend(true)
-            }
-        })
-    }, [])
+            sendIncomingRequest(username, loggedUserInfoUsername)
+            getAllInfo()
+            return null
+        }
 
-    const acceptFriendHandler = (friendId, userId) => {
-        addFriend(friendId, userId)
-        addFriend(userId, friendId)
-        deleteFriendsCandidate(userId, friendId)
-        setIsFriend(true)
-        setIsSender(false)
-        setIsCandidate(false)
+
     }
-
-    const deleteFriendHandler = (friendId, userId) => {
-        deleteFriend(friendId, userId)
-        setIsFriend(false)
-        setIsSender(false)
-        setIsCandidate(false)
-    }
-
-    const addFriendCandidateHandler = (friendId, userId) => {
-        addFriendCandidate(friendId, userId)
-        setIsCandidate(true)
-    }
-
-    const deleteFriendCandidateHandler = (friendId, userId) => {
-        deleteFriendsCandidate(friendId, userId)
-        setIsCandidate(false)
-        setIsSender(false)
-    }
-
     const buttonTextChanger = () => {
-        if (isSender) {
-            return "Принять заявку"
-        } else {
-            if (isCandidate) {
+        if (profileIncomingRequests.length > 0) {
+            if (profileIncomingRequests.includes(loggedUserInfoUsername)) {
                 return "Отменить заявку"
-            } else {
-                if (isFriend) {
-                    return "Удалить из друзей"
-                } else {
+            }
+            return "Отменить заявку"
+        }
+        if (incomingRequests.includes(username)) {
+            return "Принять заявку"
+        }
+        if (profileFriends.filter(friend => friend.username === loggedUserInfoUsername).length > 0) {
+            return "Удалить из друзей"
+        }
+        if ((profileFriends.filter(friend => friend.username === loggedUserInfoUsername).length === 0)) {
+            if (profileIncomingRequests) {
+                if (!(profileIncomingRequests.includes(loggedUserInfoUsername))) {
                     return "Добавить в друзья"
                 }
             }
+            return "Добавить в друзья"
         }
-    }
 
-    const buttonHandlerChanger = () => {
-        if (isSender) {
-            acceptFriendHandler(username, loggedUserInfoUsername)
-        } else {
-            if (isCandidate) {
-                deleteFriendCandidateHandler(username, loggedUserInfoUsername)
-            } else {
-                if (isFriend) {
-                    deleteFriendHandler(username, loggedUserInfoUsername)
-                } else {
-                    addFriendCandidateHandler(username, loggedUserInfoUsername)
-                }
-            }
-        }
+
     }
 
     return (
         <div className="card" style={{backgroundColor: "#f3f3f3"}}>
             <div className="card-body">
                 <div className="d-flex flex-column align-items-center text-center">
-                    {
-                        avatar
-                            ? <img style={{height: "150px", width: "150px"}}
-                                   src={`https://dry-meadow-99203.herokuapp.com/${avatar}`}
-                                   onError={({currentTarget}) => {
-                                       currentTarget.onerror = null; // prevents looping
-                                       currentTarget.src = AvatarPlaceholder;
-                                   }}
-                                   className="rounded-circle" width="150" alt={"User"}/>
-                            : <img style={{height: "150px", width: "150px"}} src={AvatarPlaceholder}
-                                   onError={({currentTarget}) => {
-                                       currentTarget.onerror = null; // prevents looping
-                                       currentTarget.src = AvatarPlaceholder;
-                                   }}
-                                   className="rounded-circle" width="150" alt={"User"}/>
-                    }
-
+                    <BigAvatar avatarUrl={avatar}/>
                     <div className="mt-3">
                         <h4>{username}</h4>
                         <p className="text-secondary mb-1">{status || "Отсутствует"}</p>
@@ -111,8 +77,6 @@ const AvatarCard = ({avatar, username, status, address, loggedUserInfoUsername, 
                                       onClick={buttonHandlerChanger}>{buttonTextChanger()}</button>
                             : null
                         }
-                        {/*{!(loggedUserInfoUsername === username) ?
-                            <button className="btn btn-outline-primary">Сообщение</button> : null}*/}
                     </div>
                 </div>
             </div>

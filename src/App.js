@@ -16,6 +16,8 @@ import {Navigate} from "react-router";
 import SettingsPageContainer from "./components/Settings/SettingsPage";
 import MessagesPageContainer from "./components/Messages/Messages";
 import FriendsPageContainer from "./components/Friends/FriendsPage";
+import GroupsPageContainer from "./components/Groups/GroupsPage";
+import GroupProfileContainer from "./components/Groups/GroupProfile/GroupProfile";
 
 class App extends React.Component {
     componentDidMount() {
@@ -43,6 +45,8 @@ class App extends React.Component {
                         <Route path='settings' element={<SettingsPageContainer/>}/>
                         <Route path='messages' element={<MessagesPageContainer/>}/>
                         <Route path='friends/:id' element={<FriendsPageContainer/>}/>
+                        <Route path='groups' element={<GroupsPageContainer/>}/>
+                        <Route path={'groups/:id'} element={<GroupProfileContainer />} />
                     </Routes>
                 </div>
             </HashRouter>

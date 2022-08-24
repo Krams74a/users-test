@@ -19,7 +19,7 @@ export const authReducer = (state = initialState, action) => {
                 ...state,
                 loggedUserInfo: {
                     username: action.userData.username,
-                    id: action.userData.id
+                    id: action.userData.id,
                 }
             }
         case SET_IS_AUTH:

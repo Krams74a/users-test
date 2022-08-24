@@ -4,6 +4,7 @@ import {Button, Row} from "react-bootstrap";
 import {NavLink} from "react-router-dom";
 import * as Yup from "yup";
 import Preloader from "../../Preloader/Preloader";
+import SuccessAndErrorAlerts from "../../Utils/SuccessAndErrorAlerts/SuccessAndErrorAlerts";
 
 const PrivateSettingsForm = (props) => {
     const [error, setError] = useState("")
@@ -29,7 +30,7 @@ const PrivateSettingsForm = (props) => {
         twitter: Yup.string(),
         instagram: Yup.string(),
         facebook: Yup.string(),
-        isPublic: Yup.boolean()
+        publicSettings: Yup.string()
     });
 
     if (!props.profileInfo) return <Preloader />
@@ -49,14 +50,12 @@ const PrivateSettingsForm = (props) => {
                 twitter: props.profileInfo.twitter,
                 instagram: props.profileInfo.instagram,
                 facebook: props.profileInfo.facebook,
-                isPublic: props.profileInfo.isPublic
+                publicSettings: props.profileInfo.publicSettings
             }}
                     validationSchema={SignupSchema}
                     onSubmit={values => {
-                        const isPublic = (values.isPublic === "true")
                         values = {
                             ...values,
-                            isPublic: isPublic,
                             id: props.profileInfo._id
                         }
                         props.updateProfile(values)
@@ -71,28 +70,16 @@ const PrivateSettingsForm = (props) => {
                 <Form>
                     <Row className="mb-3">
                         <div className="col-md-4" style={error ? {marginBottom: "1rem"} : {}}>
-                            <label htmlFor="isPublic">Публичность страницы</label>
-                            <Field className={"form-select"} as="select" name="isPublic">
-                                <option className={"dropdown-item"} value={true}>Публичная</option>
-                                <option className={"dropdown-item"} value={false}>Скрытая</option>
+                            <label htmlFor="publicSettings">Кто может видеть информацию на вашей странице?</label>
+                            <Field className={"form-select"} as="select" name="publicSettings">
+                                <option className={"dropdown-item"} value={"All"}>Все</option>
+                                <option className={"dropdown-item"} value={"Nobody"}>Никто</option>
+                                <option className={"dropdown-item"} value={"Friends"}>Только друзья</option>
                             </Field>
                         </div>
                     </Row>
                     <Row className="mb-3">
-                        <div style={{marginTop: "5px"}}>
-                            {error ? <div className="alert alert-danger col-md-4" style={{padding: "5px", marginBottom: "0"}}>
-                                {error}
-                            </div> : null}
-                            {success ? <div className="alert alert-success col-md-4" style={{padding: "5px", marginBottom: "0"}}>
-                                {success}.
-                                <div>
-                                    <span>Можете вернуться к своей </span>
-                                    <NavLink className="alert-link" to={"/profile/"+props.loggedUserInfo.username}>
-                                        странице.
-                                    </NavLink>
-                                </div>
-                            </div> : null}
-                        </div>
+                        <SuccessAndErrorAlerts error={error} success={success} username={props.profileInfo.username} />
                     </Row>
                     <div className="col-md-4">
                         <Button type="submit" style={{marginBottom: "10px"}}>Сохранить</Button>

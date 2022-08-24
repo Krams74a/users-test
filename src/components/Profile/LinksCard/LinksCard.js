@@ -1,43 +1,49 @@
 import React from "react";
+import {withPublicSettings} from "../../../hoc/withPublicSettings";
+import {compose} from "redux";
 
-const LinksCard = ({website, github, twitter, instagram, facebook, isPublic, loggedUserInfo, username}) => {
-    return (
-        <div className="card mt-3" style={{backgroundColor: "#f3f3f3"}}>
-            {isPublic || loggedUserInfo.username === username ?
-                <ul className="list-group list-group-flush">
-                <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                    <h6 className="mb-0">
-                        Website
-                    </h6>
-                    <span className="text-secondary">{website || "Отсутствует"}</span>
-                </li>
-                <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                    <h6 className="mb-0">
-                        Github
-                    </h6>
-                    <span className="text-secondary">{github || "Отсутствует"}</span>
-                </li>
-                <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                    <h6 className="mb-0">
-                        Twitter
-                    </h6>
-                    <span className="text-secondary">{twitter || "Отсутствует"}</span>
-                </li>
-                <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                    <h6 className="mb-0">
-                        Instagram
-                    </h6>
-                    <span className="text-secondary">{instagram || "Отсутствует"}</span>
-                </li>
-                <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                    <h6 className="mb-0">
-                        Facebook
-                    </h6>
-                    <span className="text-secondary">{facebook || "Отсутствует"}</span>
-                </li>
-            </ul>: <div className="card-body" style={{backgroundColor: "#f3f3f3"}}>Пользователь скрыл информацию о профиле</div>}
-            </div>
-    )
+const LinksCard = ({website, github, twitter, instagram, facebook}) => {
+            return (
+                <div className="card mt-3" style={{backgroundColor: "#f3f3f3"}}>
+                        <ul className="list-group list-group-flush">
+                            <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 className="mb-0">
+                                    Website
+                                </h6>
+                                <a href={website} className="text-secondary">{website || "Отсутствует"}</a>
+                            </li>
+                            <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 className="mb-0">
+                                    Github
+                                </h6>
+                                <a href={github} className="text-secondary">{github || "Отсутствует"}</a>
+                            </li>
+                            <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 className="mb-0">
+                                    Twitter
+                                </h6>
+                                <a href={twitter} className="text-secondary">{twitter || "Отсутствует"}</a>
+                            </li>
+                            <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 className="mb-0">
+                                    Instagram
+                                </h6>
+                                <a href={instagram} className="text-secondary">{instagram || "Отсутствует"}</a>
+                            </li>
+                            <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 className="mb-0">
+                                    Facebook
+                                </h6>
+                                <a href={facebook} className="text-secondary">{facebook || "Отсутствует"}</a>
+                            </li>
+                        </ul>
+                </div>
+            )
 }
 
-export default LinksCard
+const LinksCardContainer = compose(
+    withPublicSettings
+)
+(LinksCard)
+
+export default LinksCardContainer

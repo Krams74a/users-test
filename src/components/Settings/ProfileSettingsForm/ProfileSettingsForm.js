@@ -9,6 +9,8 @@ import {connect} from "react-redux";
 import {deleteAvatar, getProfile, updateAvatar, updateProfile} from "../../../reducers/profile-reducer";
 import {deleteUser} from "../../../reducers/users-reducer";
 import {withAuthRedirect} from "../../../hoc/withAuthRedirect";
+import Avatar from "react-avatar-edit";
+import AvatarSettings from "../AvatarSettings/AvatarSettings";
 
 const ProfileSettingsForm = (props) => {
     const [error, setError] = useState("")
@@ -28,30 +30,6 @@ const ProfileSettingsForm = (props) => {
     useEffect(() => {
         props.getProfile(id)
     }, [id])
-
-    const onMainPhotoSelected = (event) => {
-        if (event.target.files.length) {
-            props.updateAvatar(event.target.files[0], props.profileInfo._id)
-                .then(response => {
-                    if(response.status === 200) {
-                        setSuccess(response.message)
-                    } else {
-                        setError(response.message)
-                    }
-                })
-        }
-    }
-
-    const onMainPhotoDeleted = () => {
-        props.deleteAvatar(props.profileInfo._id)
-            .then(response => {
-                if(response.status === 200) {
-                    setSuccess(response.message)
-                } else {
-                    setError(response.message)
-                }
-            })
-    }
 
     const SignupSchema = Yup.object().shape({
         username: Yup.string()
@@ -91,7 +69,8 @@ const ProfileSettingsForm = (props) => {
                 </Modal>
             </>
             <Row className="mb-3">
-                <div className="col-md-4">
+                {/*<AvatarSettings />*/}
+                {/*<div className="col-md-4">
                     <label htmlFor="picture">Изменить аватар</label>
                     <input
                         name="picture"
@@ -99,12 +78,7 @@ const ProfileSettingsForm = (props) => {
                         type="file"
                         onChange={onMainPhotoSelected}
                     />
-                </div>
-            </Row>
-            <Row className="mb-3">
-                <div className="col-md-4">
-                    <Button variant="danger" name="deletePicture" onClick={onMainPhotoDeleted}>Удалить аватар</Button>
-                </div>
+                </div>*/}
             </Row>
             <div style={{marginTop: "5px"}}>
                 {error ? <div className="alert alert-danger col-md-4" style={{padding: "5px", marginBottom: "0"}}>
@@ -151,18 +125,6 @@ const ProfileSettingsForm = (props) => {
                             })
                     }}>
                 <Form>
-                    {/*<Row className="mb-3">
-                        <div className="col-md-4">
-                            <label htmlFor="username">Имя пользователя</label>
-                            <Field
-                                name="username"
-                                className="form-control"
-                                type="text"
-                                placeholder="Имя пользователя"
-                            />
-                            <ErrorMessage component="div" name="username" className="alert alert-danger col-md-4" style={{padding: "5px", marginBottom: "5px", marginTop: "5px", width: "100%"}}/>
-                        </div>
-                    </Row>*/}
                     <Row className="mb-3">
                         <div className="col-md-4" style={error ? {marginBottom: "1rem"} : {}}>
                             <label htmlFor="status">Статус пользователя</label>
@@ -229,13 +191,13 @@ const ProfileSettingsForm = (props) => {
                     </Row>
                     <Row className="mb-3">
                         <div className="col-md-4" style={error ? {marginBottom: "1rem"} : {}}>
-                            <label htmlFor="birthday">День рождения</label>
+                            <label htmlFor="birthday">Дата рождения</label>
                             <Field
                                 id="birthday"
                                 name="birthday"
                                 className="form-control"
-                                type="text"
-                                placeholder="Введите день рождения"
+                                type="date"
+                                placeholder="Введите дату рождения"
                             />
                             <ErrorMessage component="div" name="birthday" className="alert alert-danger col-md-4" style={{padding: "5px", marginBottom: "5px", marginTop: "5px", width: "100%"}}/>
                         </div>
@@ -252,7 +214,7 @@ const ProfileSettingsForm = (props) => {
                                 id="email"
                                 name="email"
                                 className="form-control"
-                                type="text"
+                                type="email"
                                 placeholder="Введите Email"
                             />
                             <ErrorMessage component="div" name="email" className="alert alert-danger col-md-4" style={{padding: "5px", marginBottom: "5px", marginTop: "5px", width: "100%"}}/>
@@ -270,7 +232,7 @@ const ProfileSettingsForm = (props) => {
                                 id="phoneNumber"
                                 name="phoneNumber"
                                 className="form-control"
-                                type="text"
+                                type="tel"
                                 placeholder="Введите номер телефона"
                             />
                             <ErrorMessage component="div" name="phoneNumber" className="alert alert-danger col-md-4" style={{padding: "5px", marginBottom: "5px", marginTop: "5px", width: "100%"}}/>
@@ -288,7 +250,7 @@ const ProfileSettingsForm = (props) => {
                                 id="website"
                                 name="website"
                                 className="form-control"
-                                type="text"
+                                type="url"
                                 placeholder="https://test.com"
                             />
                             <ErrorMessage component="div" name="website" className="alert alert-danger col-md-4" style={{padding: "5px", marginBottom: "5px", marginTop: "5px", width: "100%"}}/>

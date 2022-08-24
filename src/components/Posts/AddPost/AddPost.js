@@ -18,6 +18,7 @@ const AddPost = (props) => {
             <Formik initialValues={{content: '',}}
                     validationSchema={SignupSchema}
                     onSubmit={(values, {resetForm}) => {
+                        console.log(values)
                         props.addPost(props.loggedUserInfo.username, values.title, values.content)
                             .then(messageAndStatus => {
                                 if(messageAndStatus.status === 200) {
@@ -33,6 +34,7 @@ const AddPost = (props) => {
                         <div className="col-md-6" style={error || success ? {marginBottom: "1rem"} : {}}>
                             <label htmlFor="content">Содержание</label>
                             <Field
+                                as={"textarea"}
                                 name="content"
                                 className="form-control"
                                 type="text"

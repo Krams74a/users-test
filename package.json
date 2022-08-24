@@ -13,6 +13,7 @@
     "formik": "^2.2.9",
     "gh-pages": "^4.0.0",
     "react": "^18.2.0",
+    "react-avatar-edit": "^1.2.0",
     "react-bootstrap": "^2.4.0",
     "react-dom": "^18.2.0",
     "react-jwt": "^1.1.6",
@@ -28,7 +29,6 @@
   "resolutions": {
     "autoprefixer": "10.4.5"
   },
-  "devDependencies": {},
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

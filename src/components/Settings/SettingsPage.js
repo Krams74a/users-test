@@ -7,9 +7,10 @@ import {deleteAvatar, getProfile, updateAvatar, updateProfile} from "../../reduc
 import {deleteUser} from "../../reducers/users-reducer";
 import ProfileSettingsForm from "./ProfileSettingsForm/ProfileSettingsForm";
 import PrivateSettingsForm from "./PrivateSettingsForm/PrivateSettingsForm";
+import AvatarSettings from "./AvatarSettings/AvatarSettings";
+import AvatarSettingsContainer from "./AvatarSettings/AvatarSettings";
 
 const SettingsPage = (props) => {
-    const pages = ["Profile", "Private"]
     const [activePage, setActivePage] = useState("Profile")
 
     return (
@@ -17,13 +18,19 @@ const SettingsPage = (props) => {
             <h1>Настройки пользователя</h1>
             <Nav variant="tabs" defaultActiveKey={activePage}>
                 <Nav.Item>
-                    <Nav.Link eventKey="link-1" onClick={() => setActivePage("Profile")}>Профиль</Nav.Link>
+                    <Nav.Link eventKey="Profile" onClick={() => setActivePage("Profile")}>Профиль</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link eventKey="link-2" onClick={() => setActivePage("Private")}>Приватность</Nav.Link>
+                    <Nav.Link eventKey="Avatar" onClick={() => setActivePage("Avatar")}>Аватар</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link eventKey="Private" onClick={() => setActivePage("Private")}>Приватность</Nav.Link>
                 </Nav.Item>
             </Nav>
-            {(activePage === pages[0]) ? <ProfileSettingsForm {...props}/> : <PrivateSettingsForm {...props}/>}
+            {(activePage === "Profile") ?
+                    <ProfileSettingsForm {...props}/> : (activePage === "Avatar") ?
+                    <AvatarSettingsContainer /> :
+                    <PrivateSettingsForm {...props}/>}
         </div>
     )
 }

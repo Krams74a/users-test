@@ -1,11 +1,15 @@
-import {profileAPI} from "../api/api"
+import {friendsAPI, profileAPI} from "../api/api"
 import {isAuth} from "./auth-reducer";
 
 const SET_PROFILE = "profile/SET_PROFILE"
+const SET_PROFILE_FRIENDS = "profile/SET_PROFILE_FRIENDS"
+const SET_PROFILE_INCOMING_REQUESTS = "profile/SET_PROFILE_INCOMING_REQUESTS"
 const SET_PROFILE_AVATAR = "profile/SET_PROFILE_AVATAR"
 
 let initialState = {
     profileInfo: null,
+    profileFriends: [],
+    profileIncomingRequests: [],
     profileId: "",
     profileAvatar: null
 }
@@ -16,6 +20,16 @@ export const profileReducer = (state = initialState, action) => {
             return {
                 ...state,
                 profileInfo: action.profile
+            }
+        case SET_PROFILE_FRIENDS:
+            return {
+                ...state,
+                profileFriends: action.profileFriends
+            }
+        case SET_PROFILE_INCOMING_REQUESTS:
+            return {
+                ...state,
+                profileIncomingRequests: action.profileIncomingRequests
             }
         case SET_PROFILE_AVATAR:
             return {
@@ -28,6 +42,8 @@ export const profileReducer = (state = initialState, action) => {
 }
 
 export const setProfile = (profile) => ({type: SET_PROFILE, profile})
+export const setProfileFriends = (profileFriends) => ({type: SET_PROFILE_FRIENDS, profileFriends})
+export const setProfileIncomingRequests = (profileIncomingRequests) => ({type: SET_PROFILE_INCOMING_REQUESTS, profileIncomingRequests})
 export const setProfileAvatar = (profileAvatar) => ({type: SET_PROFILE_AVATAR, profileAvatar})
 
 export const getProfile = (id) => async (dispatch) => {
@@ -37,7 +53,24 @@ export const getProfile = (id) => async (dispatch) => {
     } else {
         return response.data.message
     }
+}
 
+export const getProfileFriends = (id) => async (dispatch) => {
+    let response = await friendsAPI.getFriends(id)
+    if (response.status === 200) {
+        dispatch(setProfileFriends(response.data))
+    } else {
+        return response.data.message
+    }
+}
+
+export const getProfileIncomingRequests = (id) => async (dispatch) => {
+    let response = await friendsAPI.getIncomingRequests(id)
+    if (response.status === 200) {
+        dispatch(setProfileIncomingRequests(response.data))
+    } else {
+        return response.data.message
+    }
 }
 
 export const updateProfile = (profile) => async (dispatch) => {
@@ -59,13 +92,32 @@ export const updateProfile = (profile) => async (dispatch) => {
     }
 }
 
-export const updateAvatar = (avatar, id) => async (dispatch) => {
-    let data = await profileAPI.updateAvatar(avatar, id)
+export const uploadAvatar = (avatar, id) => async (dispatch) => {
+    let data = await profileAPI.uploadAvatar(avatar, id)
     if (data.status !== 200) {
         const response = {
             message: data.data.message,
             status: data.status
         }
+        dispatch(getProfile(id))
+        return response
+    } else {
+        const response = {
+            message: data.data.message,
+            status: data.status
+        }
+        return response
+    }
+}
+
+export const updateAvatar = (croppedAvatar, id) => async (dispatch) => {
+    let data = await profileAPI.updateAvatar(croppedAvatar, id)
+    if (data.status !== 200) {
+        const response = {
+            message: data.data.message,
+            status: data.status
+        }
+        dispatch(getProfile(id))
         return response
     } else {
         const response = {
@@ -83,6 +135,7 @@ export const deleteAvatar = (id) => async (dispatch) => {
             message: data.data.message,
             status: data.status
         }
+        dispatch(getProfile(id))
         return response
     } else {
         const response = {
@@ -92,11 +145,5 @@ export const deleteAvatar = (id) => async (dispatch) => {
         return response
     }
 }
-
-/*export const getAvatar = (avatarName) => async (dispatch) => {
-    let data = await profileAPI.getAvatar(avatarName)
-    console.log(data)
-    dispatch(setProfileAvatar(data))
-}*/
 
 export default profileReducer;

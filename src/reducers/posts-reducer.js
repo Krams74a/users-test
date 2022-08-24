@@ -62,6 +62,42 @@ export const addPost = (author, title, content) => async (dispatch) => {
     }
 }
 
+export const likePost = (postId, userId) => async (dispatch) => {
+    let response = await postsAPI.likePost(postId, userId)
+    if (response.status === 200) {
+        dispatch(getPosts())
+        const messageAndStatus = {
+            message: response.data.message,
+            status: response.status
+        }
+        return messageAndStatus
+    } else {
+        const messageAndStatus = {
+            message: response.data.message,
+            status: response.status
+        }
+        return messageAndStatus
+    }
+}
+
+export const dislikePost = (postId, userId) => async (dispatch) => {
+    let response = await postsAPI.dislikePost(postId, userId)
+    if (response.status === 200) {
+        dispatch(getPosts())
+        const messageAndStatus = {
+            message: response.data.message,
+            status: response.status
+        }
+        return messageAndStatus
+    } else {
+        const messageAndStatus = {
+            message: response.data.message,
+            status: response.status
+        }
+        return messageAndStatus
+    }
+}
+
 export const deletePost = (id) => async (dispatch) => {
     await postsAPI.deletePost(id)
     dispatch(getPosts())
