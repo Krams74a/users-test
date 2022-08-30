@@ -3,7 +3,12 @@ import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
 import {connect} from "react-redux";
 import AvatarCard from "./AvatarCard/AvatarCard";
-import {getProfile, getProfileFriends, getProfileIncomingRequests} from "../../reducers/profile-reducer";
+import {
+    getProfile,
+    getProfileFriends,
+    getProfileGroupsList,
+    getProfileIncomingRequests
+} from "../../reducers/profile-reducer";
 import {NavLink} from "react-router-dom";
 import {useLocation} from "react-router";
 import Preloader from "../Preloader/Preloader";
@@ -15,11 +20,12 @@ import {
 } from "../../reducers/friends-reducer";
 import LinksCardContainer from "./LinksCard/LinksCard";
 import ProfileInfoPage from "./ProfileInfoPage/ProfileInfoPage";
+import {getUserGroupsList} from "../../reducers/users-reducer";
 
 const ProfilePage = (props) => {
     const location = useLocation();
     const userId = location.pathname.split("/")[2]
-    const [error] = useState()
+    const [error, setError] = useState()
 
     const checkIsFriend = () => {
         props.friendsList.forEach(friend => {
@@ -31,19 +37,25 @@ const ProfilePage = (props) => {
 
     const getAllInfo = () => {
         props.getProfile(userId)
+            .then(response => {
+                if (response.statusCode !== 200) {
+                    setError(response.message)
+                }
+            })
         props.getProfileIncomingRequests(userId)
         props.getIncomingRequests(props.loggedUserInfo.username)
         props.getFriends(props.loggedUserInfo.username)
         props.getProfileFriends(userId)
+        props.getUserGroupsList(userId)
+        props.getProfileGroupsList(userId)
     }
 
     useEffect(() => {
         getAllInfo()
     }, [userId])
 
+    if (error) return <div>Пользователя с данным именем не существует.</div>
     if (!props.profileInfo || !props.friendsList || !props.profileFriends || !props.profileIncomingRequests) return <Preloader/>
-    if (error) return <div>Пользователя с данным именем не существует. Вы можете создать свою <NavLink
-        to={"/register"}>страницу.</NavLink></div>
     if (!(props.profileInfo.username === userId)) return <Preloader/>
 
     return (
@@ -74,7 +86,11 @@ const ProfilePage = (props) => {
                                          birthday={props.profileInfo.birthday} email={props.profileInfo.email}
                                          fullname={props.profileInfo.fullName}
                                          phoneNumber={props.profileInfo.phoneNumber}
-                                         publicSettings={props.profileInfo.publicSettings} isFriend={checkIsFriend} profileFriends={props.profileFriends} profile={props.profileInfo}/>
+                                         publicSettings={props.profileInfo.publicSettings}
+                                         isFriend={checkIsFriend}
+                                         profileFriends={props.profileFriends}
+                                         profile={props.profileInfo}
+                                         profileGroupsList={props.profileGroupsList}/>
                     </div>
                 </div>
 
@@ -91,7 +107,9 @@ const mapStateToProps = (state) => {
         profileFriends: state.profile.profileFriends,
         friendsList: state.friends.friendsList,
         incomingRequests: state.friends.incomingRequests,
-        profileIncomingRequests: state.profile.profileIncomingRequests
+        profileIncomingRequests: state.profile.profileIncomingRequests,
+        profileGroupsList: state.profile.groupsList,
+        userGroupsList: state.users.groupsList
     }
 }
 
@@ -106,7 +124,9 @@ const ProfileContainer = compose(
         removeFromFriends,
         getProfileFriends,
         getIncomingRequests,
-        getProfileIncomingRequests
+        getProfileIncomingRequests,
+        getUserGroupsList,
+        getProfileGroupsList
     }),
     withAuthRedirect
 )(ProfilePage)

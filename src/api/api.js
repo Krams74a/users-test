@@ -72,6 +72,12 @@ export const usersAPI = {
                 return response.data
             })
     },
+    getUserGroupsList(username) {
+        return axiosInstance.get(`/users/groups/${username}`)
+            .then(response => {
+                return response.data
+            })
+    },
     deleteUser(id) {
         return axiosInstance.delete(`/user/${id}`)
             .then(response => {
@@ -207,7 +213,7 @@ export const friendsAPI = {
 
 export const groupsAPI = {
     createGroup(groupInfo) {
-        return axiosInstance.post(`/groups/create`)
+        return axiosInstance.post(`/groups/create`, groupInfo)
             .then(response => {
                 return response
             })
@@ -230,15 +236,32 @@ export const groupsProfileAPI = {
     getGroupProfile(id) {
         return axiosInstance.get(`/groups/${id}`)
             .then(response => {
-                console.log(response)
                 return response
             })
             .catch((error) => {
                 return error.response
             })
     },
-    updateGroupProfile(groupProfile) {
-        return axiosInstance.put(`/groups`, groupProfile)
+    follow(groupName, username) {
+        return axiosInstance.post(`/groups/follow`, {groupName, username})
+            .then(response => {
+                return response
+            })
+            .catch((error) => {
+                return error.response
+            })
+    },
+    unfollow(groupName, username) {
+        return axiosInstance.post(`/groups/unfollow`, {groupName, username})
+            .then(response => {
+                return response
+            })
+            .catch((error) => {
+                return error.response
+            })
+    },
+    updateGroupProfile(groupProfile, oldGroupName) {
+        return axiosInstance.put(`/groups`, {groupProfile, oldGroupName})
     },
     uploadGroupAvatar(avatar, id) {
         let formData = new FormData();
@@ -264,5 +287,11 @@ export const groupsProfileAPI = {
     },
     deleteGroupAvatar(id) {
         return axiosInstance.put(config.avatarApiUrl+`/groups/avatar/delete`, {id})
+    },
+    deleteGroup(id) {
+        return axiosInstance.delete(`/groups/${id}`)
+            .then(response => {
+                return response.data
+            })
     }
 }

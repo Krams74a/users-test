@@ -13,7 +13,12 @@ const ProfileInfoPage = (props) => {
                                    fullname={props.fullName}
                                    phoneNumber={props.phoneNumber}
                                    publicSettings={props.publicSettings} isFriend={props.checkIsFriend} profileFriends={props.profileFriends} profile={props.profileInfo}/>
-            <AdditionalInfoPage profileFriends={props.profileFriends} profile={props.profileInfo} loggedUserInfoUsername={props.loggedUserInfoUsername} username={props.username} publicSettings={props.publicSettings}/>
+            <AdditionalInfoPage profileGroupsList={props.profileGroupsList}
+                                profileFriends={props.profileFriends}
+                                profile={props.profileInfo}
+                                loggedUserInfoUsername={props.loggedUserInfoUsername}
+                                username={props.username}
+                                publicSettings={props.publicSettings}/>
         </div>
     );
 };

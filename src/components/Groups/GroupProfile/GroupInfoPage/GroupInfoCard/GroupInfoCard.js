@@ -1,11 +1,12 @@
 import React from "react";
 import {useNavigate} from "react-router-dom";
+import {Button} from "react-bootstrap";
 
 const GroupInfoCard = ({loggedUserInfoUsername, groupAuthor, groupName, groupDescription}) => {
     const navigate = useNavigate()
 
     const navigateToSettings = () => {
-        navigate("/settings")
+        navigate("/settings/group")
     }
 
     return (
@@ -16,9 +17,7 @@ const GroupInfoCard = ({loggedUserInfoUsername, groupAuthor, groupName, groupDes
                 {
                     loggedUserInfoUsername === groupAuthor
                         ? <div className="row">
-                            <div className="col-sm-12" style={{marginTop: "10px"}}>
-                                <button className="btn btn-primary" onClick={navigateToSettings}>Редактировать</button>
-                            </div>
+
                         </div>
                         : null
                 }

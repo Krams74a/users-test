@@ -42,19 +42,6 @@ const AddPost = (props) => {
                             />
                             <ErrorMessage component="div" name="content" className="alert alert-danger col-md-4" style={{padding: "5px", marginBottom: "5px", marginTop: "5px", width: "100%"}}/>
                         </div>
-                        <div>
-                            {error ? <div className="alert alert-danger col-md-4" style={{padding: "5px", marginBottom: "0"}}>
-                                {error}
-                            </div> : null}
-                            {success ? <div className="alert alert-success col-md-4" style={{padding: "5px", marginBottom: "0"}}>
-                                {success}.
-                                <div>
-                                    <NavLink className="alert-link" to={"/login"}>
-                                        Необходимо войти
-                                    </NavLink>
-                                </div>
-                            </div> : null}
-                        </div>
                     </Row>
                     <div className="col-md-4">
                         <Button type="submit">Опубликовать</Button>

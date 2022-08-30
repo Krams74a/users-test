@@ -11,7 +11,7 @@ const Header = (props) => {
     const navigate = useNavigate()
     return (
         <div>
-            <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark" style={{marginBottom: "15px"}}>
+            <Navbar collapseOnSelect expand="lg" bg={"primary"} variant="dark" style={{marginBottom: "15px"}}>
                 <Container>
                     <Navbar.Brand as={NavLink} to={`/profile/${props.loggedUserInfo.username}`}>{config.header}</Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav"/>

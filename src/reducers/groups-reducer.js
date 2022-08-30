@@ -1,5 +1,6 @@
 import {groupsAPI} from "../api/api"
 import {setUsers} from "./users-reducer";
+import {setGroupProfile} from "./groupProfile-reducer";
 
 const CREATE_GROUP = "groups/CREATE_GROUP"
 const SET_GROUPS_LIST = "groups/SET_GROUPS_LIST"
@@ -37,6 +38,18 @@ export const groupsReducer = (state = initialState, action) => {
 
 export const setGroupsList = (groupsList) => ({type: SET_GROUPS_LIST, groupsList})
 export const setPagesInfo = (pagesInfo) => ({type: SET_PAGES_INFO, pagesInfo})
+
+export const createGroup = (groupInfo) => async (dispatch) => {
+    let response = await groupsAPI.createGroup(groupInfo)
+    dispatch(getGroupsList(1, 10))
+    if (response.status === 200) {
+        return {statusCode: response.status}
+    } else {
+        return {statusCode: response.status,
+            message: response.data.message
+        }
+    }
+}
 
 export const getGroupsList = (page, perPage) => async (dispatch) => {
     let data = await groupsAPI.getGroupsList(page, perPage)

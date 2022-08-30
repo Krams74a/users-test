@@ -1,8 +1,10 @@
-import {friendsAPI, profileAPI} from "../api/api"
+import {friendsAPI, profileAPI, usersAPI} from "../api/api"
 import {isAuth} from "./auth-reducer";
+import {setGroupsList} from "./users-reducer";
 
 const SET_PROFILE = "profile/SET_PROFILE"
 const SET_PROFILE_FRIENDS = "profile/SET_PROFILE_FRIENDS"
+const SET_PROFILE_GROUPS_LIST = "profile/SET_PROFILE_GROUPS_LIST"
 const SET_PROFILE_INCOMING_REQUESTS = "profile/SET_PROFILE_INCOMING_REQUESTS"
 const SET_PROFILE_AVATAR = "profile/SET_PROFILE_AVATAR"
 
@@ -11,7 +13,8 @@ let initialState = {
     profileFriends: [],
     profileIncomingRequests: [],
     profileId: "",
-    profileAvatar: null
+    profileAvatar: null,
+    groupsList: []
 }
 
 export const profileReducer = (state = initialState, action) => {
@@ -20,6 +23,11 @@ export const profileReducer = (state = initialState, action) => {
             return {
                 ...state,
                 profileInfo: action.profile
+            }
+        case SET_PROFILE_GROUPS_LIST:
+            return {
+                ...state,
+                groupsList: [...action.groupsList]
             }
         case SET_PROFILE_FRIENDS:
             return {
@@ -42,6 +50,7 @@ export const profileReducer = (state = initialState, action) => {
 }
 
 export const setProfile = (profile) => ({type: SET_PROFILE, profile})
+export const setProfileGroupsList = (groupsList) => ({type: SET_PROFILE_GROUPS_LIST, groupsList})
 export const setProfileFriends = (profileFriends) => ({type: SET_PROFILE_FRIENDS, profileFriends})
 export const setProfileIncomingRequests = (profileIncomingRequests) => ({type: SET_PROFILE_INCOMING_REQUESTS, profileIncomingRequests})
 export const setProfileAvatar = (profileAvatar) => ({type: SET_PROFILE_AVATAR, profileAvatar})
@@ -50,9 +59,16 @@ export const getProfile = (id) => async (dispatch) => {
     let response = await profileAPI.getProfile(id)
     if (response.status === 200) {
         dispatch(setProfile(response.data))
+        return {statusCode: response.status}
     } else {
-        return response.data.message
+        return {statusCode: response.status,
+        message: response.data.message}
     }
+}
+
+export const getProfileGroupsList = (username) => async (dispatch) => {
+    let data = await usersAPI.getUserGroupsList(username)
+    dispatch(setProfileGroupsList(data))
 }
 
 export const getProfileFriends = (id) => async (dispatch) => {

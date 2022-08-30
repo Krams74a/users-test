@@ -1,5 +1,5 @@
-import {friendsAPI, groupsProfileAPI, profileAPI} from "../api/api"
-import {isAuth} from "./auth-reducer";
+import {friendsAPI, groupsProfileAPI, profileAPI, usersAPI} from "../api/api"
+import {isAuth, logout} from "./auth-reducer";
 
 const SET_GROUP_PROFILE = "group/SET_GROUP_PROFILE"
 const SET_GROUP_MEMBERS = "group/SET_GROUP_MEMBERS"
@@ -37,16 +37,37 @@ export const setGroupProfileAvatar = (groupProfileAvatar) => ({type: SET_GROUP_P
 
 export const getGroupProfile = (id) => async (dispatch) => {
     let response = await groupsProfileAPI.getGroupProfile(id)
-    console.log(response.data)
+    console.log(response)
     if (response.status === 200) {
         dispatch(setGroupProfile(response.data))
+        return {statusCode: response.status}
+    } else {
+        return {statusCode: response.status,
+        message: response.data.message
+        }
+    }
+}
+
+export const follow = (groupName, username) => async (dispatch) => {
+    let response = await groupsProfileAPI.follow(groupName, username)
+    if (response.status === 200) {
+        dispatch(getGroupProfile(groupName))
     } else {
         return response.data.message
     }
 }
 
-export const updateGroupProfile = (profile) => async (dispatch) => {
-    let data = await groupsProfileAPI.updateGroupProfile(profile)
+export const unfollow = (groupName, username) => async (dispatch) => {
+    let response = await groupsProfileAPI.unfollow(groupName, username)
+    if (response.status === 200) {
+        dispatch(getGroupProfile(groupName))
+    } else {
+        return response.data.message
+    }
+}
+
+export const updateGroupProfile = (profile, oldGroupName) => async (dispatch) => {
+    let data = await groupsProfileAPI.updateGroupProfile(profile, oldGroupName)
     if (data.status !== 200) {
         const response = {
             message: data.data.message,
@@ -116,6 +137,10 @@ export const deleteGroupAvatar = (id) => async (dispatch) => {
         }
         return response
     }
+}
+
+export const deleteGroup = (id) => async (dispatch) => {
+    let data = await groupsProfileAPI.deleteGroup(id)
 }
 
 export default groupProfileReducer;

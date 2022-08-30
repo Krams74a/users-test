@@ -5,7 +5,7 @@ const UserInfoCard = ({loggedUserInfoUsername, username, fullname, sex, birthday
     const navigate = useNavigate()
 
     const navigateToSettings = () => {
-        navigate("/settings")
+        navigate("/settings/profile")
     }
 
             return (
