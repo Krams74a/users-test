@@ -3,13 +3,11 @@ import React from "react";
 export const withPublicSettings = (Component) => {
     class RedirectComponent extends React.Component {
         render() {
-            switch (this.props.publicSettings) {
+            console.log(this.props)
+            switch (this.props.profile.publicSettings) {
                 case "All":
                     return <Component {...this.props} />
                 case "Nobody":
-                    if (this.props.profile.username === this.props.loggedUserInfoUsername) {
-                        return <Component {...this.props} />
-                    }
                     if(this.props.website) {
                         return (
                             <div className="card mt-3" style={{backgroundColor: "#f3f3f3"}}>

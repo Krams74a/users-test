@@ -28,7 +28,6 @@ export function UsersPage(props) {
         <div>
             <h1>Все группы</h1>
             {showCreateGroup && <CreateGroup loggedUserInfoUsername={props.loggedUserInfo.username} createGroup={props.createGroup} show={showCreateGroup} onHide={() => setShowCreateGroup(false)}/>}
-            <Warning warningText="Группы ещё не до конца сделаны, создавать и подписываться пока что нельзя."/>
             <div style={{cursor: "pointer"}} onClick={() => setShowCreateGroup(true)}>
                 <Card style={{width: '25rem', marginBottom: "10px", backgroundColor: "#f3f3f3"}}>
                     <Card.Body>

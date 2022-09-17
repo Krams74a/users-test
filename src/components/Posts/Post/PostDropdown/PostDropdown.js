@@ -3,6 +3,7 @@ import {Dropdown} from "react-bootstrap";
 
 const PostDropdown = (props) => {
     const deletePostHandler = (id) => {
+        console.log(id)
         props.deletePost(id)
     }
 

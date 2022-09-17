@@ -2,11 +2,13 @@ import {friendsAPI, groupsProfileAPI, profileAPI, usersAPI} from "../api/api"
 import {isAuth, logout} from "./auth-reducer";
 
 const SET_GROUP_PROFILE = "group/SET_GROUP_PROFILE"
+const SET_GROUP_POSTS = "group/SET_GROUP_POSTS"
 const SET_GROUP_MEMBERS = "group/SET_GROUP_MEMBERS"
 const SET_GROUP_PROFILE_AVATAR = "group/SET_GROUP_PROFILE_AVATAR"
 
 let initialState = {
     groupProfileInfo: null,
+    groupPosts: []
 }
 
 export const groupProfileReducer = (state = initialState, action) => {
@@ -15,6 +17,11 @@ export const groupProfileReducer = (state = initialState, action) => {
             return {
                 ...state,
                 groupProfileInfo: action.groupProfileInfo
+            }
+        case SET_GROUP_POSTS:
+            return {
+                ...state,
+                groupPosts: action.groupPosts
             }
         case SET_GROUP_MEMBERS:
             return {
@@ -32,18 +39,41 @@ export const groupProfileReducer = (state = initialState, action) => {
 }
 
 export const setGroupProfile = (groupProfileInfo) => ({type: SET_GROUP_PROFILE, groupProfileInfo})
+export const setGroupPosts = (groupPosts) => ({type: SET_GROUP_POSTS, groupPosts})
 export const setGroupMembers = (groupMembers) => ({type: SET_GROUP_MEMBERS, groupMembers})
 export const setGroupProfileAvatar = (groupProfileAvatar) => ({type: SET_GROUP_PROFILE_AVATAR, groupProfileAvatar})
 
-export const getGroupProfile = (id) => async (dispatch) => {
+export const getGroupProfile = (id, loggedUsername) => async (dispatch) => {
     let response = await groupsProfileAPI.getGroupProfile(id)
     console.log(response)
     if (response.status === 200) {
         dispatch(setGroupProfile(response.data))
+        dispatch(getGroupPosts(id, loggedUsername))
         return {statusCode: response.status}
     } else {
         return {statusCode: response.status,
         message: response.data.message
+        }
+    }
+}
+
+export const getGroupPosts = (id, loggedUsername) => async (dispatch) => {
+    let response = await groupsProfileAPI.getGroupPosts(id)
+    response.data.forEach(post => {
+        console.log(post)
+        post.isLiked = false
+        post.likedUsers.forEach(username => {
+            console.log(username, loggedUsername)
+            post.isLiked = username === loggedUsername;
+        })
+    })
+    if (response.status === 200) {
+        dispatch(setGroupPosts(response.data))
+        return {statusCode: response.status}
+    } else {
+        return {
+            statusCode: response.status,
+            message: response.data.message
         }
     }
 }

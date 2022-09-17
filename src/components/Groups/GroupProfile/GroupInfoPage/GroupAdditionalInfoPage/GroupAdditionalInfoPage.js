@@ -10,25 +10,21 @@ const GroupAdditionalInfoPage = ({groupMembers}) => {
     }
     if (groupMembers)
         return (
-            <div className="row gutters-sm">
-                <div className="col-sm-6 mb-3">
-                    <div className="card h-100" style={{backgroundColor: "#f3f3f3"}}>
-                        <div className="card-body">
-                            <h6 className="d-flex align-items-center mb-3">Подписчики</h6>
-                            {groupMembers.length > 0 ? <div style={{display: "flex"}}>
-                                {groupMembers.map((member, key) => {
-                                    if (key < 5)
-                                        return(
-                                            <div key={key} style={{marginRight: "15px", cursor: "pointer", textAlign: "center"}} onClick={() => navigateToUser(member.username)}>
-                                                <SmallAvatar avatarUrl={member.croppedAvatarUrl}/>
-                                                <span>{member.username}</span>
-                                            </div>
-                                        )
-                                })}
-                            </div> : <div>У группы пока нет подписчиков...</div>}
-
-                        </div>
-                    </div>
+            <div className="card mt-3">
+                <div className="card-body" style={{backgroundColor: "#f3f3f3"}}>
+                    <h6 className="d-flex align-items-center mb-3">Подписчики</h6>
+                    {groupMembers.length > 0 ? <div style={{display: "flex"}}>
+                        {groupMembers.map((member, key) => {
+                            if (key < 5)
+                                return (
+                                    <div key={key} style={{marginRight: "15px", cursor: "pointer", textAlign: "center"}}
+                                         onClick={() => navigateToUser(member.username)}>
+                                        <SmallAvatar avatarUrl={member.croppedAvatarUrl}/>
+                                        <span>{member.username}</span>
+                                    </div>
+                                )
+                        })}
+                    </div> : <div>У группы пока нет подписчиков...</div>}
                 </div>
 
                 {/*<div className="col-sm-6 mb-3">

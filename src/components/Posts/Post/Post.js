@@ -12,7 +12,6 @@ import HeartFilled from "../../../assets/like/heart-filled.png"
 import LikeButton from "./LikeButton/LikeButton";
 
 export const Post = (props) => {
-
     const [isHovering, setIsHovering] = useState(false);
 
     const handleMouseEnter = () => {

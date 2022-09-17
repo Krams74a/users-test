@@ -15,8 +15,8 @@ export const postsAPI = {
                 return response.data
             })
     },
-    addPost(author, title, content) {
-        return axiosInstance.post(`/posts`, {author, title, content})
+    addPost(author, title, content, postType, placeOfCreation) {
+        return axiosInstance.post(`/posts`, {author, title, content, postType, placeOfCreation})
             .then(response => {
                 return response
             })
@@ -70,6 +70,12 @@ export const usersAPI = {
         return axiosInstance.get(`/users?page=${page}&perPage=${perPage}`, { headers: {Authorization: "Bearer "+localStorage.getItem("token")} })
             .then(response => {
                 return response.data
+            })
+    },
+    getProfilePosts(loggedUsername) {
+        return axiosInstance.get(`/user/posts/${loggedUsername}`)
+            .then(response => {
+                return response
             })
     },
     getUserGroupsList(username) {
@@ -241,6 +247,16 @@ export const groupsProfileAPI = {
             .catch((error) => {
                 return error.response
             })
+    },
+    getGroupPosts(id) {
+      return axiosInstance.get(`/groups/${id}/posts`)
+          .then(response => {
+              console.log(response)
+              return response
+          })
+          .catch((error) => {
+              return error.response
+          })
     },
     follow(groupName, username) {
         return axiosInstance.post(`/groups/follow`, {groupName, username})

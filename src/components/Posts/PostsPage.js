@@ -10,21 +10,20 @@ import {
 } from "../../reducers/posts-reducer";
 import {connect} from "react-redux";
 import Post from "./Post/Post";
-import AddPost from "./AddPost/AddPost";
+import AddPost from "../Utils/AddPost/AddPost";
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
 
 export function PostsPage(props) {
     useEffect(() => {
-        props.getPosts()
+        props.getPosts(props.loggedUserInfo.username)
     }, [])
 
     if (!props.postsInfo) return <div>Loading...</div>
     return (
         <div>
             <h1>Посты других пользователей</h1>
-            <AddPost addPost={props.addPost} addNewPost={props.addNewPost}
-                     loggedUserInfo={props.loggedUserInfo}/>
+            <AddPost addPost={props.addPost} loggedUserInfo={props.loggedUserInfo} postType={"General"} placeOfCreation={"General"}/>
             {[...props.postsInfo].reverse().map(post => <Post id={post._id} key={post._id} author={post.author}
                                                               title={post.title} likesCount={post.likesCount}
                                                               content={post.content} picture={post.picture}
@@ -32,7 +31,7 @@ export function PostsPage(props) {
                                                               deletePostAction={props.deletePostAction}
                                                               loggedUsername={props.loggedUserInfo.username}
                                                               authorProfile={post.authorProfile}
-                                                              created={post.created} likePost={props.likePost} dislikePost={props.dislikePost} likedUsers={post.likedUsers}/>)}
+                                                              created={post.created} postType={post.postType} likePost={props.likePost} dislikePost={props.dislikePost} likedUsers={post.likedUsers} isLiked={post.isLiked}/>)}
         </div>
     )
 }

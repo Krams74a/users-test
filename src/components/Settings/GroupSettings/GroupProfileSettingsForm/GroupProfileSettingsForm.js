@@ -17,7 +17,7 @@ const GroupProfileSettingsForm = (props) => {
     const [success, setSuccess] = useState("")
     const [show, setShow] = useState(false);
     /*const nameRegex = /^[A-Za-z0-9]+$/;*/
-    const nameRegex = /^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)?$/;
+    const nameRegex = /^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)+(?: [a-zA-Z0-9]+)?$/;
 
 
     const navigate = useNavigate()
